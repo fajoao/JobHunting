@@ -32,9 +32,26 @@ export function useTrilhas(): { id: string; nome: string }[] {
   const perfil = useSource<PerfilPainel>('perfil')
   const vagas = useSource<Vaga>('vagas')
   const out = new Map<string, { id: string; nome: string }>()
-  for (const p of perfil.data) for (const t of p.trilhas ?? []) if (t?.nome) out.set(t.nome, { id: t.id || slug(t.nome), nome: t.nome })
+  for (const p of perfil.data)
+    for (const t of [...lerTrilhas(p.trilhas), ...lerTrilhas(p.trilhas_ordem)]) if (!out.has(t.nome)) out.set(t.nome, t)
   for (const r of vagas.data) if (r.trilha && !out.has(r.trilha)) out.set(r.trilha, { id: slug(r.trilha), nome: r.trilha })
   return [...out.values()]
+}
+
+/** Accepts the trilhas as a list of {id, nome}, a list of names, JSON text or names separated by "|". */
+function lerTrilhas(v: unknown): { id: string; nome: string }[] {
+  if (typeof v === 'string') {
+    try {
+      return lerTrilhas(JSON.parse(v))
+    } catch {
+      return lerTrilhas(v.split('|'))
+    }
+  }
+  if (!Array.isArray(v)) return []
+  return v
+    .map((x) => (typeof x === 'string' ? { nome: x.trim() } : (x as { id?: string; nome?: string }) ?? {}))
+    .filter((x): x is { id?: string; nome: string } => Boolean(x.nome))
+    .map((x) => ({ id: x.id || slug(x.nome), nome: x.nome }))
 }
 
 export const slug = (s: string) =>

@@ -34,7 +34,7 @@ export const mockData: Record<string, Record<string, Record<string, unknown>>> =
     'lid-demo': { em: iso(90), trilha: 'Liderança', coletadas: 1720, novas: 2, aplicadas: 0, obs: 'Exemplo' },
   },
   'data/radar/pedidos': {},
-  'data/perfil': {
+  'data/radar/perfil': {
     perfil: {
       nome: 'Maria Teste',
       trilhas: [

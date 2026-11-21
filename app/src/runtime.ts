@@ -72,7 +72,7 @@ export function mockRuntime(): Runtime {
     execucoes: 'data/radar/execucoes',
     pedidos: 'data/radar/pedidos',
     progresso: 'data/radar/progresso',
-    perfil: 'data/perfil',
+    perfil: 'data/radar/perfil',
   }
   return {
     data<T>(id: string): Source<T> {

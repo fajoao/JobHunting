@@ -13,7 +13,9 @@ export type Trilha = string
 export interface PerfilPainel {
   id?: string
   nome?: string
-  trilhas?: { id: string; nome: string }[]
+  trilhas?: { id: string; nome: string }[] | string
+  /** Same trilhas as plain text, "A|B|C", for stores that flatten lists. */
+  trilhas_ordem?: string
 }
 
 export interface Vaga {
