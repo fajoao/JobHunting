@@ -101,10 +101,11 @@ def main():
         m['conquista_principal_en'] = perguntar('  Sua conquista, em inglês', m['conquista_principal_en'])
     m['assinatura'] = p['primeiro_nome']
 
-    print('\nO bloco "curriculo" (experiências, formação, certificações) é longo para o terminal.')
+    print('\nO bloco "curriculo" (resumo, experiências, formação, certificações) segue o modelo ATS e é longo para o terminal.')
     print(f'Edite-o em {DESTINO} ou peça à skill jobhunting-setup para montar a partir do seu CV atual.')
 
-    os.makedirs(BASE, exist_ok=True)
+    os.makedirs(BASE, mode=0o700, exist_ok=True)
+    os.chmod(BASE, 0o700)
     with open(DESTINO, 'w', encoding='utf-8') as f:
         json.dump(perfil, f, ensure_ascii=False, indent=2)
     os.chmod(DESTINO, 0o600)

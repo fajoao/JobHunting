@@ -11,6 +11,18 @@ const ROTULO: Record<string, [string, string]> = {
   descartada: ['Descartada', 'mut'],
 }
 
+/** Só aceita links http(s) ou arquivos do próprio dashboard: bloqueia javascript:, data: e afins vindos das fontes de vagas. */
+function linkSeguro(u?: string): string | undefined {
+  if (!u) return undefined
+  if (u.startsWith('/_blob/')) return u
+  try {
+    const p = new URL(u)
+    return p.protocol === 'https:' || p.protocol === 'http:' ? p.href : undefined
+  } catch {
+    return undefined
+  }
+}
+
 type Filtro = 'perfil' | 'pendente' | 'claude' | 'voce' | 'abaixo' | 'todas'
 
 function filtrar(rows: Vaga[], f: Filtro) {
@@ -60,7 +72,7 @@ function Card({ r, onStatus, saindo }: { r: Vaga; onStatus: (id: string, s: Stat
         <b data-source="vagas" data-field="match" data-where={'id=' + encodeURIComponent(r.id)}>{r.match}</b>
       </div>
       <div className="jh-job-main">
-        <a className="jh-job-t" href={r.url} target="_blank" rel="noopener noreferrer">{r.titulo}</a>
+        <a className="jh-job-t" href={linkSeguro(r.url)} target="_blank" rel="noopener noreferrer">{r.titulo}</a>
         <div className="jh-meta">
           <span>{r.empresa}</span>
           <span>{r.local}</span>
@@ -75,12 +87,12 @@ function Card({ r, onStatus, saindo }: { r: Vaga; onStatus: (id: string, s: Stat
         {r.motivo_match && <div className="jh-why">{r.motivo_match}</div>}
       </div>
       <div className="jh-act">
-        <LinkBtn href={r.url} size="sm" icon={Icon.external}>Abrir vaga</LinkBtn>
+        {linkSeguro(r.url) && <LinkBtn href={linkSeguro(r.url)} size="sm" icon={Icon.external}>Abrir vaga</LinkBtn>}
         {r.status === 'pendente' && (
           <Btn size="sm" icon={Icon.check} onClick={() => onStatus(r.id, 'aplicada_voce')}>Marcar como aplicada</Btn>
         )}
-        {r.cv_url && (
-          <LinkBtn href={r.cv_url} variant="ghost" size="sm" icon={Icon.file}>Currículo</LinkBtn>
+        {linkSeguro(r.cv_url) && (
+          <LinkBtn href={linkSeguro(r.cv_url)} variant="ghost" size="sm" icon={Icon.file}>Currículo</LinkBtn>
         )}
         <ExcluirBtn onConfirm={() => onStatus(r.id, 'excluida')} />
       </div>

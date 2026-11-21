@@ -1,6 +1,5 @@
 {
   "_leia_me": "Copie para profile/profile.json (ignorado pelo git) ou rode a skill jobhunting-setup, que pergunta tudo e preenche por você. Nunca coloque CPF, RG ou senhas aqui.",
-
   "pessoal": {
     "nome": "Seu Nome Completo",
     "primeiro_nome": "Seu",
@@ -11,7 +10,6 @@
     "uf": "SP",
     "nacionalidade_sem_visto_brasil": true
   },
-
   "busca": {
     "trilhas": [
       {
@@ -29,7 +27,12 @@
     "titulos_excluidos": "(vendas|sales|account executive|comercial|recruiter|marketing|contabil|fiscal)",
     "locais": {
       "aceita_remoto_brasil": true,
-      "cidades_aceitas": ["sao paulo", "osasco", "barueri", "alphaville"],
+      "cidades_aceitas": [
+        "sao paulo",
+        "osasco",
+        "barueri",
+        "alphaville"
+      ],
       "aceita_mudanca": false
     },
     "palavras_chave": {
@@ -49,7 +52,6 @@
     "corte_claude_aplica": 80,
     "candidatura_automatica": false
   },
-
   "candidatura": {
     "_aviso": "Usado só para preencher formulários públicos quando você autorizar. Nunca é gravado no dashboard.",
     "empresa_atual_ou_anterior": "",
@@ -74,31 +76,71 @@
     },
     "carta_de_apresentacao": true
   },
-
   "curriculo": {
-    "headline": "Seu Cargo Alvo | Área 1 | Área 2",
-    "resumo": "3 a 5 frases com anos de experiência, foco, 2 ou 3 resultados com números e ferramentas principais.",
-    "competencias": [
-      ["Competência 1", "descrição curta"],
-      ["Competência 2", "descrição curta"]
+    "_leia_me": "Estrutura do currículo ATS (templates/curriculo/modelo-ats.md). Só fatos reais: as skills reordenam e reescrevem, nunca inventam.",
+    "titulos_alvo": {
+      "Product Manager": "Senior Product Manager | Technical Product Manager | AI Product Manager",
+      "Liderança": "IT Manager | Gerente de Tecnologia | Líder de Operações"
+    },
+    "anos_experiencia": 10,
+    "resumo": [
+      "Cargo-alvo e área com mais de N anos de experiência em domínio 1, domínio 2 e domínio 3. Atuo com competência 1, competência 2 e competência 3.",
+      "Na Empresa Atual, atuo como Cargo, liderando iniciativa ou produto com responsabilidade sobre escopo. Idealizei ou estruturei entrega 1 e entrega 2."
     ],
+    "resumo_por_trilha": {},
+    "resultado_destaque": "aumentei ou reduzi o indicador X de A para B em N meses, com impacto em Y.",
+    "trajetoria": "Comecei em área inicial, evoluí para área intermediária e hoje atuo com área atual.",
     "experiencias": [
       {
-        "empresa": "Empresa",
-        "periodo": "mm/aaaa - mm/aaaa",
-        "cargo": "Cargo | Cidade, UF",
-        "bullets": ["Resultado com número.", "Outro resultado com número."]
+        "empresa": "Empresa Atual",
+        "cidade": "Cidade – UF",
+        "cargo": "Cargo",
+        "area": "Área ou produto",
+        "periodo": "Mmm/AAAA – Atual",
+        "escopo": "Uma frase sobre a responsabilidade do cargo, do começo ao resultado.",
+        "bullets": [
+          "Verbo de ação no passado + o que você fez + resultado com número.",
+          "Verbo de ação + iniciativa + impacto para o negócio ou para o usuário."
+        ]
+      },
+      {
+        "empresa": "Empresa Anterior",
+        "cidade": "Cidade – UF",
+        "cargo": "Cargo",
+        "area": "",
+        "periodo": "Mmm/AAAA – Mmm/AAAA",
+        "escopo": "",
+        "bullets": [
+          "Verbo de ação + o que fez + resultado."
+        ]
       }
     ],
-    "formacao": ["Curso - Instituição | ano"],
-    "certificacoes": ["Certificação"],
-    "comunidade": [],
-    "ferramentas": [
-      ["Categoria", "ferramenta 1, ferramenta 2"]
+    "formacao": [
+      {
+        "curso": "Nome do curso",
+        "grau": "Bacharelado",
+        "instituicao": "Instituição",
+        "periodo": "AAAA–AAAA"
+      }
     ],
-    "idiomas": "Português (nativo), Inglês (B1)"
+    "formacao_complementar": {
+      "titulo": "Formação Complementar",
+      "itens": [
+        "Curso – Escola",
+        "Curso – Escola"
+      ]
+    },
+    "certificacoes": [
+      {
+        "grupo": "Fornecedor ou área",
+        "itens": [
+          "Certificação 1",
+          "Certificação 2"
+        ]
+      }
+    ],
+    "idiomas": "Português (nativo); Inglês (intermediário)"
   },
-
   "mensagens": {
     "foco_cargo": "Product Manager com foco em IA e Automação",
     "foco": "Product Management de IA e Automação",

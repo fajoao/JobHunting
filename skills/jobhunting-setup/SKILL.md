@@ -18,7 +18,15 @@ O perfil é o único lugar com dados pessoais do usuário. Todas as outras skill
 
 ## Como conduzir
 1. Verifique se o perfil já existe. Se existir, mostre um resumo (sem salário nem autoidentificação) e pergunte o que mudar.
-2. Se o usuário tiver um currículo (PDF, DOCX, texto do LinkedIn), peça o arquivo e extraia o bloco `curriculo` dele. **Nunca invente fatos**; confirme números e datas que estiverem ambíguos.
+2. Peça o currículo atual (PDF, DOCX ou texto do LinkedIn) e preencha o bloco `curriculo` no formato do modelo ATS (`${CLAUDE_PLUGIN_ROOT}/templates/curriculo/modelo-ats.md`):
+   - `titulos_alvo` por trilha;
+   - `resumo` em 2 parágrafos;
+   - `resultado_destaque` e `trajetoria`;
+   - `experiencias`: empresa, cidade, cargo, área, período, escopo e bullets;
+   - `formacao`, `formacao_complementar` e `certificacoes` por grupo;
+   - `idiomas`.
+
+   **Nunca invente fatos.** Confirme números e datas que estiverem ambíguos.
 3. Faça a entrevista em blocos curtos, uma pergunta por vez (use AskUserQuestion quando houver opções):
    - **Pessoal:** nome, e-mail, telefone, LinkedIn, cidade, UF.
    - **Busca:**
@@ -37,4 +45,5 @@ O perfil é o único lugar com dados pessoais do usuário. Todas as outras skill
      - principal conquista com número;
      - versões em inglês, se ele quiser falar com recrutadores de fora.
 4. Grave o JSON seguindo exatamente a estrutura do exemplo, com `chmod 600`. Valide o JSON lendo de volta.
-5. Termine dizendo o que ele pode fazer agora: `/jobhunting:jobhunting-buscar-vagas`, `/jobhunting:jobhunting-curriculo`, `/jobhunting:jobhunting-linkedin`, `/jobhunting:jobhunting-dashboard`, `/jobhunting:jobhunting-rotinas`.
+5. Ofereça o **kit de início**, gerado em paralelo pelo agente `jobhunting`: currículo ATS por trilha, guia de abordagem a recrutadores e plano de SSI no LinkedIn.
+6. Termine dizendo o que ele pode fazer agora: `/jobhunting:jobhunting-buscar-vagas`, `/jobhunting:jobhunting-curriculo`, `/jobhunting:jobhunting-carta`, `/jobhunting:jobhunting-plano-ssi`, `/jobhunting:jobhunting-abordagem-recrutadores`, `/jobhunting:jobhunting-linkedin`, `/jobhunting:jobhunting-dashboard`, `/jobhunting:jobhunting-rotinas`.

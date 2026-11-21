@@ -287,6 +287,7 @@ def main(out, caminho_perfil, so_trilha=None):
         v.update(id=re.sub(r'[^A-Za-z0-9_.~:@+-]', '-', v['ext'])[:180], trilha=tri, match=s, local_fit=lmot, pontos_fortes=ach, alertas=pen)
         v['desc'] = v['desc'][:6000]
         res.append(v)
+    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     with open(out, 'w', encoding='utf-8') as f:
         json.dump({'coletadas': total, 'erros': erros, 'vagas': res, 'em': time.strftime('%Y-%m-%dT%H:%M:%S')}, f, ensure_ascii=False)
     print(f'coletadas={total} no_perfil_filtradas={len(res)} erros={erros}')
