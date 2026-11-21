@@ -6,7 +6,7 @@ Amazon Jobs, Google Careers, Microsoft Careers), filtra pelo perfil do usuário 
 Para o LinkedIn, que não tem API pública de vagas, monta a busca booleana a partir das trilhas e devolve os links.
 
 Uso:
-    python3 -I scripts/coletor.py saida.json [--perfil ~/.jobhunting/profile.json] [--trilha "Product Manager"]
+    python3 -I scripts/coletor.py saida.json [--perfil ~/.jobhunting/profile.json] [--trilha "Product Manager,Outras vagas"]
                                              [--sites linkedin,microsoft,bancos] [--perguntar]
     python3 -I scripts/coletor.py --listar-sites      # catálogo de sites e grupos, em JSON
 
@@ -209,7 +209,7 @@ def linkedin_buscas(perfil, so_trilha=None):
     if cfg.get('so_remoto'): params['f_WT'] = '2'
     out = []
     for t in b.get('trilhas', []):
-        if so_trilha and t['nome'] != so_trilha: continue
+        if so_trilha and t['nome'] not in so_trilha: continue
         titulos = t.get('titulos_linkedin') or _expandir(t['titulos'])
         if not titulos: continue
         q = '(' + ' OR '.join(f'"{x}"' for x in titulos) + ')'
@@ -432,9 +432,9 @@ def main(out, caminho_perfil, so_trilha=None, sites=None, perguntar=False):
         if any(e and e in norm(v['empresa']) for e in regras.empresas_excluidas): continue
         tri = regras.trilha(v['titulo'])
         tudo = v.get('site') in todas
-        if not tri and tudo and not so_trilha:
+        if not tri and tudo and (not so_trilha or TRILHA_OUTRAS in so_trilha):
             tri = TRILHA_OUTRAS
-        if not tri or (so_trilha and tri != so_trilha): continue
+        if not tri or (so_trilha and tri not in so_trilha): continue
         lp, lmot = regras.local(v['local'], v['desc'])
         if lp is None and not (tudo and lmot != 'fora do Brasil'): continue
         s, lmot, ach, pen = regras.score(v, tri)
@@ -462,5 +462,6 @@ if __name__ == '__main__':
         sys.exit(0)
     saida = a[0] if a and not a[0].startswith('--') else 'vagas.json'
     sites = opt('--sites')
-    main(saida, opt('--perfil', perfil_padrao()), opt('--trilha'),
+    trilhas = opt('--trilha')
+    main(saida, opt('--perfil', perfil_padrao()), [t.strip() for t in trilhas.split(',') if t.strip()] if trilhas else None,
          sites.split(',') if sites is not None else None, '--perguntar' in a)

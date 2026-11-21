@@ -30,6 +30,7 @@ Perfil em `${JOBHUNTING_HOME:-~/.jobhunting}/profile.json`. Se não existir, rod
 ```bash
 python3 -I "${CLAUDE_PLUGIN_ROOT}/scripts/coletor.py" "${JOBHUNTING_HOME:-$HOME/.jobhunting}/vagas-$(date +%Y%m%d).json" --sites <ids> [--trilha "Nome da trilha"]
 ```
+- `--trilha` aceita mais de uma, separadas por vírgula. Use `"Outras vagas"` para incluir as vagas fora das trilhas das empresas de `busca.todas_as_vagas` (ex.: `--trilha "Product Manager,Outras vagas"`).
 - Pode levar até uns 10 minutos quando inclui Workday, que limita requisições. Rode em segundo plano se o ambiente permitir e avise o usuário.
 - **Todas as vagas:** nas empresas de `busca.todas_as_vagas` (padrão: Microsoft, Amazon e Google), o coletor traz todas as vagas no Brasil. As que não batem com nenhuma trilha vêm como "Outras vagas", com match menor e um alerta.
 - **Microsoft:** às vezes responde 429 a scripts. Se aparecer em `erros`, abra `https://apply.careers.microsoft.com/careers?domain=microsoft.com&location=Brazil` no Claude in Chrome e liste as vagas da página.
