@@ -114,6 +114,10 @@ def main():
 
     print('\nO bloco "curriculo" (resumo, experiências, formação, certificações) segue o modelo ATS e é longo para o terminal.')
     print(f'Edite-o em {DESTINO} ou peça à skill jobhunting-setup para montar a partir do seu CV atual.')
+    print('Dica: converta o CV para Markdown (.md) antes de enviar ao Claude. Gasta menos tokens que PDF ou DOCX.')
+    print('  Ex.: markitdown curriculo.pdf -o curriculo.md  |  pandoc curriculo.docx -t gfm -o curriculo.md')
+    print('  Ferramentas para Mac, Windows e Linux: templates/converter-para-markdown.md')
+    print('\nAs trilhas que você escolheu viram os filtros do painel (dashboard).')
 
     os.makedirs(BASE, mode=0o700, exist_ok=True)
     os.chmod(BASE, 0o700)

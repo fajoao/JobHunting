@@ -23,7 +23,12 @@ description: "Cria ou atualiza o painel web do JobHunting (dashboard em React co
      - `execucoes` → `data/radar/execucoes`
      - `pedidos` → `data/radar/pedidos`
      - `progresso` → `data/radar/progresso`
-     - `perfil` → `data/perfil` (só `{nome}`, que aparece no topo do painel)
+     - `perfil` → `data/perfil`
+   - `data/perfil`, `doc_id` `perfil`: `{nome, trilhas}`, sem nenhum outro dado pessoal.
+     - `nome`: o primeiro nome, que aparece no topo do painel.
+     - `trilhas`: uma entrada `{id, nome}` para cada trilha de `busca.trilhas`, na ordem do perfil. `id` é o slug do nome (ex.: `product-manager`) e deve ser o mesmo `TRILHA_ID` das rotinas.
+     - Se `busca.todas_as_vagas` não estiver vazio, acrescente `{id: "outras", nome: "Outras vagas"}`.
+     - Essas trilhas viram os filtros do painel. Quando a pessoa mudar as trilhas no perfil (`jobhunting-setup`), regrave este documento.
    - `files/vendor.js` e `files/app.js`: o conteúdo de `dist/`, no formato `{text}`
    - `files/index.html`:
      ```html

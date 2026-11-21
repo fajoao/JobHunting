@@ -25,7 +25,7 @@ if (window.dash && window.claude) {
   // Counts each KPI and funnel figure is checked against; readers can see this function in Sources.
   dash.calc('resumo', {
     title: 'Resumo por trilha',
-    description: 'Contagem de vagas por trilha: analisadas, no perfil (match 65+), aplicadas por Claude, pendentes e aplicadas por você. Vagas excluídas na página ficam de fora.',
+    description: 'Contagem de vagas por trilha (as trilhas vêm do perfil do usuário): analisadas, no perfil (match 65+), aplicadas por Claude, pendentes e aplicadas por você. Vagas excluídas na página ficam de fora.',
     inputs: ['vagas'],
     fn: (vagas) => {
       vagas = vagas.filter((r) => r.status !== 'excluida')
@@ -39,7 +39,8 @@ if (window.dash && window.claude) {
           total: rs.length,
         }
       }
-      return ['Todas', 'Product Manager', 'Liderança'].map((t) =>
+      const trilhas = [...new Set(vagas.map((r) => r.trilha).filter(Boolean))].sort()
+      return ['Todas', ...trilhas].map((t) =>
         Object.assign({ trilha: t }, conta(t === 'Todas' ? vagas : vagas.filter((r) => r.trilha === t))),
       )
     },

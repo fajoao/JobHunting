@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { contar, fmtDataHora, relativo, useNow, useRuntime, useSource, useVagas } from '../hooks'
-import type { Execucao, Pedido } from '../types'
+import { contar, fmtDataHora, relativo, useNow, useRuntime, useSource, useTrilhas, useVagas } from '../hooks'
+import type { Execucao, Pedido, PerfilPainel } from '../types'
 import { Btn, Icon, Segmented } from './ui'
 
 export type Tema = 'sistema' | 'claro' | 'escuro'
@@ -75,7 +75,8 @@ export function Hero({ trilha, setTrilha, tema, setTema }: { trilha: string; set
   const now = useNow()
   const c = contar(rows)
   const ultima = exec.data.map((r) => r.em).sort().slice(-1)[0]
-  const perfil = useSource<{ nome?: string }>('perfil')
+  const perfil = useSource<PerfilPainel>('perfil')
+  const trilhas = useTrilhas()
   const nome = perfil.status === 'ok' ? perfil.data.find((r) => r.nome)?.nome : undefined
 
   return (
@@ -119,11 +120,7 @@ export function Hero({ trilha, setTrilha, tema, setTema }: { trilha: string; set
         label="Trilha"
         value={trilha}
         onChange={setTrilha}
-        options={[
-          { value: '', label: 'Todos' },
-          { value: 'Product Manager', label: 'Product Manager' },
-          { value: 'Liderança', label: 'Liderança' },
-        ]}
+        options={[{ value: '', label: 'Todas' }, ...trilhas.map((t) => ({ value: t.nome, label: t.nome }))]}
       />
     </header>
   )

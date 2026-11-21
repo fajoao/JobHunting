@@ -18,7 +18,7 @@ Só fatos do perfil. Você pode:
 **Nunca** crie números, cargos, empresas, ferramentas ou certificações.
 
 ## Passos
-1. **Confira o perfil.** Se o bloco `curriculo` estiver vazio ou com os textos do exemplo, peça o currículo atual da pessoa (PDF, DOCX ou texto) e preencha o bloco seguindo o modelo:
+1. **Confira o perfil.** Se o bloco `curriculo` estiver vazio ou com os textos do exemplo, peça o currículo atual da pessoa. Antes, mostre a dica de `${CLAUDE_PLUGIN_ROOT}/templates/converter-para-markdown.md`: de preferência em `.md`, ou PDF, DOCX ou texto e preencha o bloco seguindo o modelo:
    - titulos_alvo por trilha
    - resumo em 2 parágrafos
    - resultado_destaque e trajetoria

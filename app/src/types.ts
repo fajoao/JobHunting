@@ -6,7 +6,15 @@ export type Status =
   | 'descartada'
   | 'excluida'
 
-export type Trilha = 'Product Manager' | 'Liderança'
+/** Trilhas come from the user's profile (setup interview), so any name is valid. */
+export type Trilha = string
+
+/** Public part of the profile shown on the dashboard: name and the trilhas chosen in the interview. */
+export interface PerfilPainel {
+  id?: string
+  nome?: string
+  trilhas?: { id: string; nome: string }[]
+}
 
 export interface Vaga {
   id: string
@@ -52,7 +60,7 @@ export interface Pedido {
 export type Etapa = 'na_fila' | 'coletando' | 'analisando' | 'gravando' | 'concluida' | 'erro'
 
 export interface Progresso {
-  id: 'pm' | 'lideranca' | string
+  id: string
   trilha: string
   etapa: Etapa | string
   detalhe?: string

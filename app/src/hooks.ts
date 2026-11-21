@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from 'react'
-import type { Runtime, Source, Vaga } from './types'
+import type { PerfilPainel, Runtime, Source, Vaga } from './types'
 
 export const RuntimeContext = createContext<Runtime | null>(null)
 
@@ -23,6 +23,22 @@ export function useVagas(trilha: string) {
     .filter((r) => r.status !== 'excluida' && (!trilha || r.trilha === trilha))
   return { status: src.status, rows }
 }
+
+/**
+ * Trilhas for the filters: the ones saved in the profile (from the setup interview), plus any trilha
+ * that already has jobs. Without a profile, falls back to the trilhas found in the jobs.
+ */
+export function useTrilhas(): { id: string; nome: string }[] {
+  const perfil = useSource<PerfilPainel>('perfil')
+  const vagas = useSource<Vaga>('vagas')
+  const out = new Map<string, { id: string; nome: string }>()
+  for (const p of perfil.data) for (const t of p.trilhas ?? []) if (t?.nome) out.set(t.nome, { id: t.id || slug(t.nome), nome: t.nome })
+  for (const r of vagas.data) if (r.trilha && !out.has(r.trilha)) out.set(r.trilha, { id: slug(r.trilha), nome: r.trilha })
+  return [...out.values()]
+}
+
+export const slug = (s: string) =>
+  s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
 export function contar(rows: Vaga[]) {
   const perfil = rows.filter((r) => r.match >= 65)

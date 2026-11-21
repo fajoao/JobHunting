@@ -37,14 +37,14 @@ Python 3.9 ou mais recente. O coletor de vagas usa só a biblioteca padrão.
 
 | Módulo | O que faz | Saída |
 |---|---|---|
-| **Cadastro** | Entrevista (Claude) ou perguntas no terminal (`setup_perfil.py`). Nunca pede CPF, RG ou senhas. Autoidentificação é opcional. | `~/.jobhunting/profile.json` (permissão 600) |
+| **Cadastro** | Entrevista (Claude) ou perguntas no terminal (`setup_perfil.py`). Sugere converter o currículo para Markdown para gastar menos tokens. Nunca pede CPF, RG ou senhas. Autoidentificação é opcional. | `~/.jobhunting/profile.json` (permissão 600) |
 | **Coleta de vagas** | Pergunta em quais sites buscar (LinkedIn, Big Techs, bancos e fintechs, empresas de tecnologia ou sites específicos). Lê APIs públicas (Greenhouse, Lever, Workday, Oracle HCM, Gupy, Amazon Jobs, Google Careers, Microsoft Careers); em Microsoft, Amazon e Google traz todas as vagas no Brasil. Filtra por trilha, senioridade, local, idioma e empresas excluídas, e calcula o match. No LinkedIn, monta a busca booleana por trilha e devolve o link. | `~/.jobhunting/vagas-AAAAMMDD.json` |
 | **Currículo ATS** | Esqueleto fixo (uma coluna, até 2 páginas, seções padrão); muda títulos, resumo e ordem dos bullets por trilha ou vaga | PDF e DOCX em `curriculos/` |
 | **Carta de apresentação** | Cabeçalho igual ao do currículo e 4 parágrafos (interesse, trajetória, resultado, contribuição) | PDF e DOCX em `cartas/` |
 | **Guia de recrutadores** | 4 textos com os dados da pessoa, busca booleana dos cargos-alvo e 8 táticas de vagas ocultas com exemplos personalizados | PDF e DOCX em `linkedin/` |
 | **Plano de SSI no LinkedIn** | Pilares do SSI, como e quando postar, como comentar, rotina diária, vagas ocultas por empresa, calendário de 30 dias com datas e 13 posts | PDF e DOCX em `linkedin/` |
 | **LinkedIn no dia a dia** | Abre a busca booleana de vagas, lista recrutadores, confere quem aceitou o convite, prepara o follow-up e registra tudo | `contatos.csv` |
-| **Painel web** | KPIs, funil, gráficos de match, lista de vagas (Abrir, Marcar como aplicada, Excluir), botão "Buscar agora" e progresso das buscas | Artifact do Claude (tipo Dashboard) |
+| **Painel web** | KPIs, funil, gráficos de match, lista de vagas (Abrir, Marcar como aplicada, Excluir), botão "Buscar agora" e progresso das buscas. Os filtros de trilha vêm das trilhas que a pessoa escolheu na entrevista (mais "Outras vagas", se houver) | Artifact do Claude (tipo Dashboard) |
 | **Rotinas** | Busca por trilha 2x ao dia, resumo diário, verificador do "Buscar agora" e Texto 2 no LinkedIn | Rotinas na nuvem e tarefas locais |
 
 ---
@@ -111,6 +111,20 @@ python3 scripts/gerador_plano_ssi.py plano.json              # plano de SSI
 O formato de cada JSON está no início de cada script e em `templates/`.
 
 ---
+
+## Dica: envie o currículo em Markdown
+
+Converta o seu PDF ou DOCX para Markdown (`.md`) antes de enviá-lo ao Claude ou a outra IA. O `.md` é texto puro e **gasta bem menos tokens** do que um PDF ou DOCX. As skills de cadastro e de currículo mostram esta dica na hora de pedir o arquivo.
+
+| Ferramenta | Sistemas | Converte | Comando ou caminho |
+|---|---|---|---|
+| **MarkItDown** (Microsoft, grátis) | Mac, Windows, Linux | PDF, DOCX | `markitdown curriculo.pdf -o curriculo.md` |
+| **Pandoc** (grátis) | Mac, Windows, Linux | DOCX | `pandoc curriculo.docx -t gfm -o curriculo.md` |
+| **Docling** (IBM, grátis) | Mac, Windows, Linux | PDF com colunas e tabelas, DOCX | `docling curriculo.pdf --to md` |
+| **Typora** (pago, com interface gráfica) | Mac, Windows, Linux | DOCX | Arquivo > Importar |
+| **Google Docs** (navegador) | Qualquer um | DOCX, PDF | Arquivo > Fazer download > Markdown (.md) |
+
+Instalação, cuidados com privacidade e como conferir o resultado estão em [`templates/converter-para-markdown.md`](templates/converter-para-markdown.md).
 
 ## Seus dados
 

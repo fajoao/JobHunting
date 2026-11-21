@@ -1,4 +1,4 @@
-import { fmtDataHora, relativo, useNow, useSource } from '../hooks'
+import { fmtDataHora, relativo, useNow, useSource, useTrilhas } from '../hooks'
 import type { Execucao, Pedido, Progresso as Prog } from '../types'
 import { ultimoPedido } from './Hero'
 
@@ -10,13 +10,12 @@ const ETAPAS = [
   ['concluida', 'Concluída'],
 ] as const
 
-const TRILHA_DE: Record<string, string> = { pm: 'Product Manager', lideranca: 'Liderança' }
 const SEM_NOTICIA_MIN = 60
 const MOSTRAR_CONCLUIDA_H = 6
 
 /** Where a run stands, also inferring "done" from the run log when an older routine didn't report it. */
-function situacao(p: Prog, execucoes: Execucao[], now: number) {
-  const trilha = p.trilha || TRILHA_DE[p.id] || p.id
+function situacao(p: Prog, execucoes: Execucao[], now: number, nomes: Record<string, string> = {}) {
+  const trilha = p.trilha || nomes[p.id] || p.id
   const terminouNoLog = execucoes.some((e) => e.trilha === trilha && p.iniciado_em && e.em > p.iniciado_em)
   let etapa = String(p.etapa)
   if (etapa !== 'concluida' && etapa !== 'erro' && terminouNoLog) etapa = 'concluida'
@@ -34,8 +33,8 @@ function situacao(p: Prog, execucoes: Execucao[], now: number) {
   return { trilha, etapa, parada, pct: Math.round(pct), total, proc }
 }
 
-function Cartao({ p, execucoes, now }: { p: Prog; execucoes: Execucao[]; now: number }) {
-  const s = situacao(p, execucoes, now)
+function Cartao({ p, execucoes, now, nomes }: { p: Prog; execucoes: Execucao[]; now: number; nomes: Record<string, string> }) {
+  const s = situacao(p, execucoes, now, nomes)
   const idx = ETAPAS.findIndex(([k]) => k === s.etapa)
   const rodando = s.etapa !== 'concluida' && s.etapa !== 'erro' && !s.parada
   const estado = s.etapa === 'erro' ? 'erro' : s.parada ? 'parada' : s.etapa === 'concluida' ? 'ok' : 'run'
@@ -88,9 +87,10 @@ export function Progresso() {
   const exec = useSource<Execucao>('execucoes')
   const pedidos = useSource<Pedido>('pedidos')
   const pedido = ultimoPedido(pedidos.data)
+  const nomes = Object.fromEntries(useTrilhas().map((t) => [t.id, t.nome]))
 
   const visiveis = prog.data.filter((p) => {
-    const s = situacao(p, exec.data, now)
+    const s = situacao(p, exec.data, now, nomes)
     if (s.etapa !== 'concluida' && s.etapa !== 'erro') return !s.parada || (p.atualizado_em && now - new Date(p.atualizado_em).getTime() < 24 * 3_600_000)
     return p.atualizado_em ? now - new Date(p.atualizado_em).getTime() < MOSTRAR_CONCLUIDA_H * 3_600_000 : false
   }).sort((a, b) => String(a.id).localeCompare(String(b.id)))
@@ -122,7 +122,7 @@ export function Progresso() {
         </div>
       )}
       <div className="jh-prog-grid" data-source="progresso">
-        {visiveis.map((p) => <Cartao key={p.id} p={p} execucoes={exec.data} now={now} />)}
+        {visiveis.map((p) => <Cartao key={p.id} p={p} execucoes={exec.data} now={now} nomes={nomes} />)}
       </div>
     </section>
   )

@@ -34,6 +34,16 @@ export const mockData: Record<string, Record<string, Record<string, unknown>>> =
     'lid-demo': { em: iso(90), trilha: 'Liderança', coletadas: 1720, novas: 2, aplicadas: 0, obs: 'Exemplo' },
   },
   'data/radar/pedidos': {},
+  'data/perfil': {
+    perfil: {
+      nome: 'Maria Teste',
+      trilhas: [
+        { id: 'product-manager', nome: 'Product Manager' },
+        { id: 'lideranca', nome: 'Liderança' },
+        { id: 'outras', nome: 'Outras vagas' },
+      ],
+    },
+  },
   'data/radar/progresso': {
     pm: {
       trilha: 'Product Manager', etapa: 'analisando', detalhe: 'Revisando: Senior Product Manager – Nubank',

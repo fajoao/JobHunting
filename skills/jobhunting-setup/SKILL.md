@@ -18,7 +18,7 @@ O perfil é o único lugar com dados pessoais do usuário. Todas as outras skill
 
 ## Como conduzir
 1. Verifique se o perfil já existe. Se existir, mostre um resumo (sem salário nem autoidentificação) e pergunte o que mudar.
-2. Peça o currículo atual (PDF, DOCX ou texto do LinkedIn) e preencha o bloco `curriculo` no formato do modelo ATS (`${CLAUDE_PLUGIN_ROOT}/templates/curriculo/modelo-ats.md`):
+2. Antes de pedir o currículo, mostre a dica de `${CLAUDE_PLUGIN_ROOT}/templates/converter-para-markdown.md` (converter o PDF ou DOCX para Markdown para gastar menos tokens, com as ferramentas para Mac, Windows e Linux). Depois peça o currículo atual (`.md` de preferência, ou PDF, DOCX ou texto do LinkedIn) e preencha o bloco `curriculo` no formato do modelo ATS (`${CLAUDE_PLUGIN_ROOT}/templates/curriculo/modelo-ats.md`):
    - `titulos_alvo` por trilha;
    - `resumo` em 2 parágrafos;
    - `resultado_destaque` e `trajetoria`;
@@ -34,6 +34,7 @@ O perfil é o único lugar com dados pessoais do usuário. Todas as outras skill
      - remoto no Brasil e cidades aceitas;
      - mudança de cidade e nível de inglês;
      - empresas a excluir (ex.: empregador atual);
+     - **as trilhas viram as opções do painel:** cada trilha aparece como filtro no dashboard, junto com "Outras vagas" se houver empresas com todas as vagas. Confirme os nomes como a pessoa quer vê-los;
      - vagas afirmativas a incluir (opcional);
      - cortes de match (padrão 65 e 80).
    - **Onde buscar** (`busca.sites`): mostre os grupos de `coletor.py --listar-sites` e pergunte com AskUserQuestion, `multiSelect: true`:
