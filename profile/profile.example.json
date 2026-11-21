@@ -1,0 +1,111 @@
+{
+  "_leia_me": "Copie para profile/profile.json (ignorado pelo git) ou rode a skill jobhunting-setup, que pergunta tudo e preenche por você. Nunca coloque CPF, RG ou senhas aqui.",
+
+  "pessoal": {
+    "nome": "Seu Nome Completo",
+    "primeiro_nome": "Seu",
+    "email": "voce@exemplo.com",
+    "telefone": "(00) 00000-0000",
+    "linkedin": "linkedin.com/in/seu-perfil",
+    "cidade": "Sua Cidade",
+    "uf": "SP",
+    "nacionalidade_sem_visto_brasil": true
+  },
+
+  "busca": {
+    "trilhas": [
+      {
+        "nome": "Product Manager",
+        "titulos": "(product manager|gerente de produto|group product|technical product|product lead|head of product|product owner senior)",
+        "titulos_fortes": "(product manager|gerente de produto|group product|technical product)"
+      },
+      {
+        "nome": "Liderança",
+        "titulos": "(tech manager|engineering manager|gerente de (tecnologia|engenharia|ti)|it manager|head of (engineering|technology)|ai transformation)",
+        "titulos_fortes": "(tech manager|engineering manager|gerente de (tecnologia|engenharia|ti)|it manager)"
+      }
+    ],
+    "senioridade_excluida": "\\b(jr|junior|pleno|estagi\\w*|intern(ship)?|aprendiz|trainee|assistente|auxiliar|banco de talentos|talent pool)\\b",
+    "titulos_excluidos": "(vendas|sales|account executive|comercial|recruiter|marketing|contabil|fiscal)",
+    "locais": {
+      "aceita_remoto_brasil": true,
+      "cidades_aceitas": ["sao paulo", "osasco", "barueri", "alphaville"],
+      "aceita_mudanca": false
+    },
+    "palavras_chave": {
+      "inteligencia artificial|artificial intelligence|\\bai\\b|\\bia\\b|llm|genai|agentes|agents": 6,
+      "automacao|automation|aiops": 5,
+      "cloud|nuvem|azure|aws|gcp": 5,
+      "roadmap|backlog|discovery|okr|kpi|metricas|metrics": 3,
+      "stakeholder|executiv|c-level|lideranca senior": 3,
+      "gestao de pessoas|people management|managing teams|direct reports": 4,
+      "sql|power bi|dashboard|dados|analytics": 3,
+      "agile|agil|scrum|kanban": 1
+    },
+    "nivel_ingles": "B1",
+    "empresas_excluidas": [],
+    "vagas_afirmativas": [],
+    "corte_voce_aplica": 65,
+    "corte_claude_aplica": 80,
+    "candidatura_automatica": false
+  },
+
+  "candidatura": {
+    "_aviso": "Usado só para preencher formulários públicos quando você autorizar. Nunca é gravado no dashboard.",
+    "empresa_atual_ou_anterior": "",
+    "remuneracao_atual": "",
+    "beneficio_alimentacao": "",
+    "senioridade_ultima_experiencia": "",
+    "disponibilidade": "imediata",
+    "modelo_aceito": "remoto, híbrido ou presencial na sua cidade",
+    "mudanca_de_cidade": "não",
+    "pretensao_salarial": {
+      "Product Manager": "",
+      "Liderança": "",
+      "regra_pj": "se a vaga for PJ, some 40%",
+      "campo_opcional": "deixe em branco ou 'a combinar'"
+    },
+    "autoidentificacao": {
+      "_aviso": "Opcional. Só responda se quiser; deixar vazio significa 'prefiro não informar'.",
+      "genero": "",
+      "raca_cor": "",
+      "pcd": "",
+      "orientacao_sexual": ""
+    },
+    "carta_de_apresentacao": true
+  },
+
+  "curriculo": {
+    "headline": "Seu Cargo Alvo | Área 1 | Área 2",
+    "resumo": "3 a 5 frases com anos de experiência, foco, 2 ou 3 resultados com números e ferramentas principais.",
+    "competencias": [
+      ["Competência 1", "descrição curta"],
+      ["Competência 2", "descrição curta"]
+    ],
+    "experiencias": [
+      {
+        "empresa": "Empresa",
+        "periodo": "mm/aaaa - mm/aaaa",
+        "cargo": "Cargo | Cidade, UF",
+        "bullets": ["Resultado com número.", "Outro resultado com número."]
+      }
+    ],
+    "formacao": ["Curso - Instituição | ano"],
+    "certificacoes": ["Certificação"],
+    "comunidade": [],
+    "ferramentas": [
+      ["Categoria", "ferramenta 1, ferramenta 2"]
+    ],
+    "idiomas": "Português (nativo), Inglês (B1)"
+  },
+
+  "mensagens": {
+    "foco_cargo": "Product Manager com foco em IA e Automação",
+    "foco": "Product Management de IA e Automação",
+    "conquista_principal": "reduzi o tempo de X de N para M em K meses",
+    "foco_cargo_en": "Product Manager focused on AI and Automation",
+    "foco_en": "Product Management for AI and Automation",
+    "conquista_principal_en": "I reduced X from N to M in K months",
+    "assinatura": "Seu"
+  }
+}

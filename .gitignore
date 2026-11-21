@@ -1,0 +1,16 @@
+# Dados pessoais do usuário — NUNCA versionar
+profile/profile.json
+profile/*.local.json
+data/
+output/
+*.docx
+*.pdf
+!docs/**/*.pdf
+.env
+.env.*
+
+# Build
+node_modules/
+app/dist/
+app/publish/
+.DS_Store
