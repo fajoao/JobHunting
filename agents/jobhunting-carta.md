@@ -1,6 +1,6 @@
 ---
 name: jobhunting-carta
-description: Subagente do JobHunting que escreve a carta de apresentação no modelo do JobHunting (4 parágrafos, uma página, PDF e DOCX) com os dados da pessoa e um desafio específico da vaga. Use quando o usuário pedir carta de apresentação ou cover letter.
+description: "Subagente do JobHunting que escreve a carta de apresentação no modelo do JobHunting (4 parágrafos, uma página, PDF e DOCX) com os dados da pessoa e um desafio específico da vaga. Use quando o usuário pedir carta de apresentação ou cover letter."
 tools: Read, Write, Bash, WebFetch, Skill
 model: sonnet
 ---

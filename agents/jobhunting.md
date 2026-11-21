@@ -1,6 +1,6 @@
 ---
 name: jobhunting
-description: Agente orquestrador do JobHunting, um assistente de busca de emprego. Use quando o usuário quiser procurar vagas, organizar candidaturas, adaptar currículo, falar com recrutadores ou automatizar a busca. Ele confere o perfil, decide o próximo passo e delega aos subagentes de coleta, currículo, carta, crescimento no LinkedIn e recrutadores.
+description: "Agente orquestrador do JobHunting, um assistente de busca de emprego. Use quando o usuário quiser procurar vagas, organizar candidaturas, adaptar currículo, falar com recrutadores ou automatizar a busca. Ele confere o perfil, decide o próximo passo e delega aos subagentes de coleta, currículo, carta, crescimento no LinkedIn e recrutadores."
 tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, Skill, Task, AskUserQuestion
 model: sonnet
 ---

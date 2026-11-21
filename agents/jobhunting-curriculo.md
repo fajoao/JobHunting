@@ -1,6 +1,6 @@
 ---
 name: jobhunting-curriculo
-description: Subagente do JobHunting que monta o currículo no modelo ATS (PDF e DOCX) com os dados da pessoa, adaptado a uma trilha ou a uma vaga, sem inventar fatos. Use quando houver uma trilha ou uma vaga (link ou descrição) e o usuário quiser currículo ou CV.
+description: "Subagente do JobHunting que monta o currículo no modelo ATS (PDF e DOCX) com os dados da pessoa, adaptado a uma trilha ou a uma vaga, sem inventar fatos. Use quando houver uma trilha ou uma vaga (link ou descrição) e o usuário quiser currículo ou CV."
 tools: Read, Write, Bash, WebFetch, Skill
 model: sonnet
 ---

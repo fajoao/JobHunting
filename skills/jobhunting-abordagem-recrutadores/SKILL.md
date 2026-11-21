@@ -1,6 +1,6 @@
 ---
 name: jobhunting-abordagem-recrutadores
-description: Gera para a pessoa o guia "Textos para recrutadores e vagas ocultas" (PDF e DOCX), com os 4 textos de abordagem (convite, depois de conectar, depois de se candidatar e follow-up) escritos com os dados dela, a busca booleana dos cargos-alvo e as 8 formas de achar vagas ocultas com exemplos personalizados. Use quando o usuário pedir mensagens para recrutadores, textos de abordagem, como falar com recrutador ou guia de vagas ocultas.
+description: "Gera para a pessoa o guia \"Textos para recrutadores e vagas ocultas\" (PDF e DOCX), com os 4 textos de abordagem (convite, depois de conectar, depois de se candidatar e follow-up) escritos com os dados dela, a busca booleana dos cargos-alvo e as 8 formas de achar vagas ocultas com exemplos personalizados. Use quando o usuário pedir mensagens para recrutadores, textos de abordagem, como falar com recrutador ou guia de vagas ocultas."
 ---
 
 # JobHunting – guia de abordagem a recrutadores

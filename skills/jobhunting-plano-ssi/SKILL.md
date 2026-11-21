@@ -1,6 +1,6 @@
 ---
 name: jobhunting-plano-ssi
-description: Gera para a pessoa o "Material de crescimento do SSI no LinkedIn", um plano de 30 dias com pilares do SSI, como e quando postar, como comentar, rotina diária, vagas ocultas por empresa, calendário com datas e 13 posts escritos a partir do perfil dela (PDF e DOCX). Use quando o usuário pedir plano de LinkedIn, SSI, Social Selling Index, crescer no LinkedIn, calendário de posts ou ideias de publicação.
+description: "Gera para a pessoa o \"Material de crescimento do SSI no LinkedIn\", um plano de 30 dias com pilares do SSI, como e quando postar, como comentar, rotina diária, vagas ocultas por empresa, calendário com datas e 13 posts escritos a partir do perfil dela (PDF e DOCX). Use quando o usuário pedir plano de LinkedIn, SSI, Social Selling Index, crescer no LinkedIn, calendário de posts ou ideias de publicação."
 ---
 
 # JobHunting – plano de crescimento do SSI no LinkedIn

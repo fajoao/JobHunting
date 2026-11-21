@@ -5,7 +5,8 @@ Procura no repositório:
   • perfis reais versionados (profile.json, contatos.csv, documentos gerados);
   • segredos (tokens do GitHub, chaves de API, chaves privadas, senhas);
   • CPF, telefones e e-mails reais fora dos exemplos fictícios;
-  • links javascript: no app.
+  • links javascript: no app;
+  • frontmatter de skills e agentes com description fora de aspas (quebra o YAML com ": ").
 Uso: python3 -I scripts/checar_seguranca.py   (sai com código 1 se achar algo)
 """
 import os, re, subprocess, sys
@@ -41,8 +42,29 @@ def versionados():
         return arquivos
 
 
+def checar_frontmatter():
+    import glob, json
+    erros = []
+    for f in sorted(glob.glob(os.path.join(RAIZ, 'skills', '*', 'SKILL.md')) + glob.glob(os.path.join(RAIZ, 'agents', '*.md'))):
+        texto = open(f, encoding='utf-8').read()
+        m = re.match(r'---\n(.*?)\n---\n', texto, re.S)
+        rel = os.path.relpath(f, RAIZ)
+        if not m:
+            erros.append(f'{rel}: sem frontmatter'); continue
+        campos = {l.split(':', 1)[0]: l.split(':', 1)[1].strip() for l in m.group(1).splitlines() if ':' in l and not l.startswith(' ')}
+        if not campos.get('name'):
+            erros.append(f'{rel}: frontmatter sem name')
+        desc = campos.get('description', '')
+        try:
+            if not (desc.startswith('"') and json.loads(desc)):
+                raise ValueError
+        except ValueError:
+            erros.append(f'{rel}: description precisa estar entre aspas duplas (YAML quebra com ": ")')
+    return erros
+
+
 def main():
-    problemas = []
+    problemas = checar_frontmatter()
     for f in versionados():
         if any(re.search(p, f) for p in PROIBIDOS):
             problemas.append(f'{f}: arquivo que não deve ser versionado')

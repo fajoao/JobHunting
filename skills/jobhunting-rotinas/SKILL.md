@@ -1,6 +1,6 @@
 ---
 name: jobhunting-rotinas
-description: Cria as rotinas agendadas do JobHunting a partir dos modelos (busca por trilha 2x ao dia, resumo diário, verificador do botão Buscar agora e Texto 2 no LinkedIn), preenchendo os dados do usuário. Use quando o usuário pedir para automatizar, agendar, "rodar todo dia" ou criar as rotinas do JobHunting.
+description: "Cria as rotinas agendadas do JobHunting a partir dos modelos (busca por trilha 2x ao dia, resumo diário, verificador do botão Buscar agora e Texto 2 no LinkedIn), preenchendo os dados do usuário. Use quando o usuário pedir para automatizar, agendar, \"rodar todo dia\" ou criar as rotinas do JobHunting."
 ---
 
 # JobHunting – rotinas agendadas

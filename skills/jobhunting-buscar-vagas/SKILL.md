@@ -1,6 +1,6 @@
 ---
 name: jobhunting-buscar-vagas
-description: Busca vagas agora nos portais de carreira (Greenhouse, Lever, Workday, Oracle, Gupy, Amazon, Google) com o perfil do usuário, pontua o match de 0 a 100 e mostra as melhores com link, sem se candidatar. Use quando o usuário pedir "buscar vagas", "o que tem de novo", "vagas com match", ou quiser rodar a coleta manualmente.
+description: "Busca vagas agora nos portais de carreira (Greenhouse, Lever, Workday, Oracle, Gupy, Amazon, Google) com o perfil do usuário, pontua o match de 0 a 100 e mostra as melhores com link, sem se candidatar. Use quando o usuário pedir \"buscar vagas\", \"o que tem de novo\", \"vagas com match\", ou quiser rodar a coleta manualmente."
 ---
 
 # JobHunting – buscar vagas

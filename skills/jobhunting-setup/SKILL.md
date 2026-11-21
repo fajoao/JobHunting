@@ -1,6 +1,6 @@
 ---
 name: jobhunting-setup
-description: Onboarding do JobHunting. Entrevista o usuário, uma pergunta por vez, para criar ou revisar o perfil de busca de vagas (~/.jobhunting/profile.json) com dados pessoais, cargos-alvo, cidades, idioma, dados de formulário e currículo. Use quando o usuário começar a usar o JobHunting, disser "configurar", "meu perfil", "atualizar meus dados", ou quando outra skill JobHunting não encontrar o perfil.
+description: "Onboarding do JobHunting. Entrevista o usuário, uma pergunta por vez, para criar ou revisar o perfil de busca de vagas (~/.jobhunting/profile.json) com dados pessoais, cargos-alvo, cidades, idioma, dados de formulário e currículo. Use quando o usuário começar a usar o JobHunting, disser \"configurar\", \"meu perfil\", \"atualizar meus dados\", ou quando outra skill JobHunting não encontrar o perfil."
 ---
 
 # JobHunting – configuração do perfil
