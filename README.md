@@ -12,7 +12,7 @@ Assistente de busca de emprego que roda no **Claude Code** como plugin (agentes 
 
 Nenhum dado pessoal fica neste repositório: tudo vem do perfil local da pessoa (`~/.jobhunting/profile.json`).
 
-**Precisa de plano pago?** Os scripts rodam de graça, sem IA. O painel, as rotinas e os agentes precisam de recursos pagos do Claude. Veja [Roda na versão gratuita do Claude, ChatGPT ou Gemini?](#roda-na-versão-gratuita-do-claude-chatgpt-ou-gemini).
+**Dúvidas?** Veja as [Perguntas frequentes](#perguntas-frequentes-faq). **Precisa de plano pago?** Os scripts rodam de graça, sem IA. O painel, as rotinas e os agentes precisam de recursos pagos do Claude. Veja [Roda na versão gratuita do Claude, ChatGPT ou Gemini?](#roda-na-versão-gratuita-do-claude-chatgpt-ou-gemini).
 
 > Arquitetura e diagramas: [docs/arquitetura.md](docs/arquitetura.md) · Privacidade: [docs/privacidade.md](docs/privacidade.md) · Segurança: [SECURITY.md](SECURITY.md)
 
@@ -177,6 +177,123 @@ O JobHunting **nunca pede CPF, RG, dados bancários ou senhas**. Detalhes em [do
 - **Candidatura automática:** vem desligada. Quando ligada, só envia em formulários públicos, sem login nem CAPTCHA, com dados que a pessoa informou.
 - **Verdade:** currículo, carta, posts e mensagens usam só fatos do perfil. Os agentes apontam lacunas e nunca as preenchem com invenção.
 - **Custos:** o uso do Claude e das rotinas na nuvem conta no plano Claude da pessoa.
+
+## Perguntas frequentes (FAQ)
+
+### Começando
+
+**O que é o JobHunting?**
+Um assistente de busca de emprego. Ele encontra vagas com match ao seu perfil e monta o currículo ATS, a carta de apresentação, o plano de crescimento no LinkedIn e as mensagens para recrutadores. Roda como plugin do Claude Code, e os scripts também funcionam sem nenhuma IA.
+
+**Preciso saber programar?**
+Não, para usar com o Claude Code: você conversa com o agente e ele faz o resto. Sem IA, basta saber rodar alguns comandos no terminal, que estão em [Uso sem nenhuma IA](#uso-sem-nenhuma-ia).
+
+**Como começo?**
+Instale o plugin (veja [Instalação](#instalação)) e escreva ao agente algo como *"quero procurar vagas de Product Manager"*. Na primeira vez ele faz uma entrevista curta para montar o seu perfil.
+
+**Que perguntas a entrevista faz?**
+- Dados de contato.
+- Cargos que você procura (as trilhas).
+- Onde buscar e cidades aceitas.
+- Nível de inglês e empresas a evitar.
+- Dados opcionais de formulário.
+- O seu currículo atual.
+
+Nada de CPF, RG, dados bancários ou senhas.
+
+**O que são as "trilhas"?**
+São os grupos de cargo que você procura, por exemplo "Product Manager" e "Liderança". Cada trilha tem os títulos que contam para ela, vira um filtro no painel e pode ter a própria rotina de busca. Você escolhe os nomes na entrevista.
+
+**Funciona no plano gratuito?**
+Em parte. Os scripts rodam de graça, mas o painel, as rotinas e os agentes precisam de recursos pagos do Claude. Veja a [tabela completa](#roda-na-versão-gratuita-do-claude-chatgpt-ou-gemini).
+
+**Funciona com ChatGPT ou Gemini?**
+Os scripts e os modelos funcionam com qualquer IA. Os agentes e skills podem virar instruções em outras plataformas. Veja [Funciona em outras IAs?](#funciona-em-outras-ias).
+
+### Vagas
+
+**Em quais sites ele busca?**
+O JobHunting pergunta antes de cada busca. As opções são:
+- **LinkedIn**, com busca booleana;
+- **Big Techs:** Microsoft, Amazon, Google, NVIDIA, Salesforce, Red Hat, Oracle e Dell;
+- **bancos e fintechs;**
+- **empresas de tecnologia;**
+- **sites específicos** que você indicar.
+
+A lista completa sai com `python3 -I scripts/coletor.py --listar-sites`.
+
+**Posso adicionar outra empresa?**
+Sim, se ela publica vagas em Greenhouse, Lever, Workday, Oracle HCM ou Gupy. Inclua a empresa em `busca.fontes` no seu perfil, com `{id, nome, grupo, tipo, args}`. Só use APIs públicas de vagas.
+
+**Por que o LinkedIn só traz um link, e não a lista de vagas?**
+O LinkedIn não tem API pública de vagas e proíbe automação. O coletor monta a busca booleana por trilha e devolve o link. Se você pedir, o Claude lê a lista no seu navegador, já logado, só para listar título, empresa e link.
+
+**Por que aparecem vagas fora da minha área na Microsoft, Amazon e Google?**
+Nessas empresas o padrão é trazer **todas** as vagas no Brasil. As que não batem com as suas trilhas aparecem como "Outras vagas", com match menor. Para mudar, edite `busca.todas_as_vagas` no perfil; vazio desliga.
+
+**Como o match de 0 a 100 é calculado?**
+O coletor soma quatro coisas:
+- o encaixe do título com a trilha;
+- as palavras-chave do seu perfil encontradas na descrição;
+- a localização;
+- a senioridade.
+
+Ele também desconta pontos quando a vaga pede inglês acima do seu nível ou um cargo acima de gerente. Com o Claude, cada vaga acima do corte ainda é revisada pela IA, que pode ajustar até 10 pontos e explica o motivo.
+
+**Ele se candidata sozinho?**
+Não, por padrão. A candidatura automática vem desligada. Se você ligar, ela só acontece em formulários públicos, sem login nem CAPTCHA, e com os dados que você informou. Nunca cria conta e nunca contorna bloqueios.
+
+**A Microsoft apareceu em "erros". E agora?**
+O site da Microsoft às vezes recusa chamadas de scripts (erro 429). A coleta das outras empresas segue normalmente. Com o Claude, a skill lê a mesma busca no navegador; sem IA, rode de novo mais tarde.
+
+### Currículo, carta e LinkedIn
+
+**O currículo inventa experiência para "dar match"?**
+Não. Currículo, carta, posts e mensagens usam só fatos do seu perfil. O JobHunting pode reordenar e reescrever o que existe com o vocabulário da vaga, e aponta as lacunas em vez de preenchê-las.
+
+**Por que converter o currículo para Markdown?**
+O `.md` é texto puro e gasta bem menos tokens que um PDF ou DOCX, o que ajuda nos limites do plano. Veja as ferramentas em [Dica: envie o currículo em Markdown](#dica-envie-o-currículo-em-markdown).
+
+**O que é o SSI do LinkedIn e o que o plano entrega?**
+O *Social Selling Index* é a nota do LinkedIn para a força da sua presença na rede. O plano de 30 dias traz:
+- os pilares do SSI;
+- quando e como postar;
+- como comentar;
+- uma rotina diária;
+- 13 posts escritos a partir da sua trajetória.
+
+O JobHunting não publica nada por você.
+
+**Ele manda mensagens para recrutadores por mim?**
+O padrão é preparar os textos para você enviar. O Claude só envia pelo navegador se você pedir explicitamente, em lotes pequenos. Antes de cada envio, ele confere no registro de contatos e no histórico da conversa para nunca mandar a mesma mensagem duas vezes à mesma pessoa. O LinkedIn proíbe automação e pode restringir a conta.
+
+### Painel e rotinas
+
+**Como mudo as trilhas que aparecem no painel?**
+Peça ao agente para atualizar o perfil (skill `jobhunting-setup`). Os filtros do painel vêm das trilhas do perfil e mudam sem mexer no código.
+
+**Com que frequência as rotinas rodam?**
+O padrão sugerido é 2 vezes por dia útil para cada trilha, mais um resumo diário. Você escolhe os horários ao criar as rotinas, e o intervalo mínimo é de 1 hora.
+
+**O botão "Buscar agora" roda na hora?**
+Ele põe um pedido na fila. Um verificador roda a cada 30 minutos e dispara as buscas, e o progresso aparece no painel.
+
+**As rotinas gastam meu plano?**
+Sim. As rotinas e as ações do Claude contam no uso do seu plano. O verificador do "Buscar agora" é o que mais roda (32 vezes por dia), por isso o agente avisa antes de criá-lo.
+
+### Privacidade e segurança
+
+**Onde ficam meus dados?**
+No seu computador, em `~/.jobhunting/`, com acesso só para o seu usuário. Nada pessoal vai para este repositório. Para as rotinas na nuvem, o perfil fica numa área do painel que só a sua conta lê. Veja [Seus dados](#seus-dados).
+
+**Quem consegue ver o meu painel?**
+Quem tiver o link. Por isso o painel nunca recebe salário, autoidentificação, contato pessoal ou CPF: só vagas, notas e o seu nome.
+
+**E se uma vaga tiver instruções escondidas para a IA?**
+Os agentes e as rotinas tratam o texto de vagas, sites e e-mails como dados, nunca como ordens. Pedidos vindos de dentro desse conteúdo são ignorados e aparecem no resumo como suspeitos. Veja [SECURITY.md](SECURITY.md).
+
+**Como apago tudo?**
+Apague a pasta `~/.jobhunting/`, desinstale o plugin (`/plugin uninstall jobhunting@jobhunting`) e exclua o painel e as rotinas nas páginas do Claude.
 
 ## Estrutura do repositório
 ```
