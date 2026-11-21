@@ -12,6 +12,8 @@ Assistente de busca de emprego que roda no **Claude Code** como plugin (agentes 
 
 Nenhum dado pessoal fica neste repositório: tudo vem do perfil local da pessoa (`~/.jobhunting/profile.json`).
 
+**Precisa de plano pago?** Os scripts rodam de graça, sem IA. O painel, as rotinas e os agentes precisam de recursos pagos do Claude. Veja [Roda na versão gratuita do Claude, ChatGPT ou Gemini?](#roda-na-versão-gratuita-do-claude-chatgpt-ou-gemini).
+
 > Arquitetura e diagramas: [docs/arquitetura.md](docs/arquitetura.md) · Privacidade: [docs/privacidade.md](docs/privacidade.md) · Segurança: [SECURITY.md](SECURITY.md)
 
 ---
@@ -94,6 +96,39 @@ Sim, em boa parte. O JobHunting foi feito em camadas, e só algumas dependem do 
 | **Agentes** (`agents/*.md`) | Formato de subagente do Claude Code | O corpo é um prompt de sistema comum. Copie para o "system prompt" ou as "instructions" de outra plataforma (GPTs, Assistants, Gemini, frameworks como LangGraph ou CrewAI) e dê a ela ferramentas equivalentes: ler e escrever arquivos e rodar comandos. A orquestração com `Task` vira chamadas entre agentes do framework escolhido. |
 | **Painel web** (`app/`) | Hoje roda como Artifact do Claude | O React é independente. `src/runtime.ts` isola a fonte de dados: troque o `dashboardRuntime` por uma API sua (ex.: Supabase) para hospedar em qualquer lugar. O `mockRuntime` mostra o contrato. |
 | **Rotinas** (`templates/rotinas/`) | Rotinas do Claude | A coleta (`coletor.py`) pode rodar em cron, GitHub Actions ou qualquer agendador. A revisão com IA pode usar a API de outro modelo. |
+
+---
+
+## Roda na versão gratuita do Claude, ChatGPT ou Gemini?
+
+**Só em parte.** Os scripts Python rodam sem nenhuma IA, e qualquer chat gratuito escreve os textos a partir dos modelos. O painel, as rotinas automáticas e os agentes dependem de recursos pagos do Claude.
+
+> Os planos e limites de cada empresa mudam com frequência. Confira na página de planos de cada uma antes de decidir.
+
+| Parte do JobHunting | Claude grátis | ChatGPT grátis | Gemini grátis |
+|---|---|---|---|
+| **Scripts Python**: coleta de vagas, currículo ATS, carta, plano de SSI, guia de recrutadores | Sim, rodam no seu computador sem IA | Sim | Sim |
+| **Escrever os textos** (resumo do CV, carta, posts) com os modelos de `templates/` | Sim: cole o modelo e o seu currículo `.md` no chat | Sim | Sim |
+| **Agentes e skills** `/jobhunting:*` | Não: precisam do Claude Code, que exige plano pago ou chave de API | Não roda como plugin | Em parte: o Gemini CLI tem uso gratuito com conta Google e pode seguir os `SKILL.md` como instruções e rodar os scripts (não testado) |
+| **Painel web com dados** (Buscar agora, progresso, Marcar como aplicada) | Não: usa Artifacts com banco de dados e rotinas do Claude | Não | Não |
+| **Rotinas automáticas** (busca 2x ao dia, resumo diário) | Não: usam as rotinas do Claude Code | Não | Não |
+| **Ações no navegador** (LinkedIn pelo Claude in Chrome) | Não: recurso pago | Não | Não |
+
+### Como usar de graça
+1. Crie o perfil no terminal: `python3 scripts/setup_perfil.py`.
+2. Busque vagas: `python3 -I scripts/coletor.py vagas.json --perguntar`. Você recebe as vagas com match e link, inclusive a busca booleana do LinkedIn.
+3. Agende a coleta de graça:
+   - **Mac e Linux:** cron, por exemplo `15 7,13 * * 1-5 cd ~/JobHunting && python3 -I scripts/coletor.py ~/.jobhunting/vagas-$(date +\%Y\%m\%d).json`.
+   - **Windows:** Agendador de Tarefas.
+   - **Na nuvem:** GitHub Actions, num repositório **privado**, porque o perfil tem dados pessoais.
+4. Escreva os textos num chat gratuito: cole o modelo (`templates/curriculo/modelo-ats.md`, `templates/carta/modelo-carta.md` ou `templates/linkedin/plano-ssi.md`) e o seu currículo em `.md`. Depois gere o PDF e o DOCX com os scripts da seção abaixo.
+5. Converta o currículo para `.md` antes de colar no chat. Isso ajuda a caber nos limites dos planos gratuitos (veja a dica de Markdown mais abaixo).
+
+### O que você perde sem plano pago
+- O painel web com KPIs, gráficos e o botão "Buscar agora".
+- As rotinas automáticas na nuvem e o resumo diário.
+- A revisão do match vaga a vaga feita pela IA. Sem ela, vale só a nota heurística do coletor.
+- As ações no navegador, como conferir convites e mandar mensagens no LinkedIn.
 
 ---
 
