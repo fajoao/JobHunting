@@ -17,8 +17,8 @@ Registro de contatos: `${JOBHUNTING_HOME:-~/.jobhunting}/contatos.csv`. O cabeç
 - **Nunca** mande a mesma mensagem duas vezes para a mesma pessoa. Confira o registro **e** o histórico da conversa antes.
 
 ## 1. Busca booleana de vagas
-1. Monte a busca a partir das trilhas: `(<títulos da trilha 1> OR <títulos da trilha 2> ...) AND (<temas do perfil>)`.
-2. Codifique a busca para URL e abra `https://www.linkedin.com/jobs/search-results/?keywords=<busca>&geoId=106057199` (Brasil).
+1. Gere a busca a partir das trilhas: `python3 -I "${CLAUDE_PLUGIN_ROOT}/scripts/coletor.py" busca.json --sites linkedin`. O campo `linkedin` traz, por trilha, `("título 1" OR "título 2" ...) AND (<busca.linkedin.temas>)` e o link pronto.
+2. Se preferir montar à mão, codifique a busca para URL e abra `https://www.linkedin.com/jobs/search-results/?keywords=<busca>&geoId=106057199` (Brasil).
    - Use `/jobs/search-results/`; o endereço antigo `/jobs/search/` não abre mais.
 3. Se ele pedir, leia as páginas de resultados só para **listar** título, empresa, local e link. Não se candidate.
 4. Salve a lista em `${JOBHUNTING_HOME:-~/.jobhunting}/buscas/` e deixe a aba aberta se ele quiser.

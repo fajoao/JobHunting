@@ -38,7 +38,7 @@ Python 3.9 ou mais recente. O coletor de vagas usa só a biblioteca padrão.
 | Módulo | O que faz | Saída |
 |---|---|---|
 | **Cadastro** | Entrevista (Claude) ou perguntas no terminal (`setup_perfil.py`). Nunca pede CPF, RG ou senhas. Autoidentificação é opcional. | `~/.jobhunting/profile.json` (permissão 600) |
-| **Coleta de vagas** | Lê APIs públicas (Greenhouse, Lever, Workday, Oracle HCM, Gupy, Amazon Jobs, Google Careers), filtra por trilha, senioridade, local, idioma e empresas excluídas, e calcula o match | `~/.jobhunting/vagas-AAAAMMDD.json` |
+| **Coleta de vagas** | Pergunta em quais sites buscar (LinkedIn, Big Techs, bancos e fintechs, empresas de tecnologia ou sites específicos). Lê APIs públicas (Greenhouse, Lever, Workday, Oracle HCM, Gupy, Amazon Jobs, Google Careers, Microsoft Careers); em Microsoft, Amazon e Google traz todas as vagas no Brasil. Filtra por trilha, senioridade, local, idioma e empresas excluídas, e calcula o match. No LinkedIn, monta a busca booleana por trilha e devolve o link. | `~/.jobhunting/vagas-AAAAMMDD.json` |
 | **Currículo ATS** | Esqueleto fixo (uma coluna, até 2 páginas, seções padrão); muda títulos, resumo e ordem dos bullets por trilha ou vaga | PDF e DOCX em `curriculos/` |
 | **Carta de apresentação** | Cabeçalho igual ao do currículo e 4 parágrafos (interesse, trajetória, resultado, contribuição) | PDF e DOCX em `cartas/` |
 | **Guia de recrutadores** | 4 textos com os dados da pessoa, busca booleana dos cargos-alvo e 8 táticas de vagas ocultas com exemplos personalizados | PDF e DOCX em `linkedin/` |
@@ -100,7 +100,9 @@ Sim, em boa parte. O JobHunting foi feito em camadas, e só algumas dependem do 
 ## Uso sem nenhuma IA
 ```bash
 python3 scripts/setup_perfil.py                              # cria ~/.jobhunting/profile.json
-python3 -I scripts/coletor.py vagas.json                     # coleta e pontua vagas
+python3 -I scripts/coletor.py --listar-sites                 # sites e grupos disponíveis
+python3 -I scripts/coletor.py vagas.json --perguntar         # pergunta os sites, coleta e pontua
+python3 -I scripts/coletor.py vagas.json --sites linkedin,big_techs
 python3 scripts/gerador_cv.py --trilha "Product Manager"     # currículo ATS
 python3 scripts/gerador_carta.py carta.json                  # carta (você escreve os 4 parágrafos)
 python3 scripts/gerador_guia_recrutadores.py guia.json       # guia de recrutadores
@@ -141,6 +143,6 @@ SECURITY.md       modelo de segurança e como reportar problemas
 ```
 
 ## Contribuindo
-- **Nova empresa:** inclua a fonte em `FONTES_PADRAO` (`scripts/coletor.py`) ou em `busca.fontes` no seu perfil. Use só APIs públicas de vagas.
+- **Nova empresa:** inclua a fonte em `FONTES_PADRAO` (`scripts/coletor.py`), com `id`, `nome` e `grupo`, ou em `busca.fontes` no seu perfil. Use só APIs públicas de vagas.
 - **Novo documento:** crie um gerador que monte uma lista de blocos e chame `jobhunting_docs.gerar`.
 - **Pull requests:** nunca inclua dados pessoais reais em exemplos, testes ou capturas de tela.

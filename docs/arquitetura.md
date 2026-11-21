@@ -57,7 +57,7 @@ flowchart TB
 
     subgraph EXT["Serviços externos"]
         direction TB
-        ATS["APIs públicas de vagas<br/>Greenhouse, Lever, Workday,<br/>Oracle, Gupy, Amazon, Google"]
+        ATS["APIs públicas de vagas<br/>Greenhouse, Lever, Workday,<br/>Oracle, Gupy, Amazon,<br/>Google, Microsoft"]
         LI["LinkedIn<br/>(navegador da pessoa)"]
         DASH["Dashboard (Artifact do Claude)<br/>app React + dados"]
         ROT["Rotinas agendadas<br/>(nuvem e locais)"]

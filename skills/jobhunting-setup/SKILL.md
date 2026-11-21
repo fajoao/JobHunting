@@ -36,6 +36,18 @@ O perfil é o único lugar com dados pessoais do usuário. Todas as outras skill
      - empresas a excluir (ex.: empregador atual);
      - vagas afirmativas a incluir (opcional);
      - cortes de match (padrão 65 e 80).
+   - **Onde buscar** (`busca.sites`): mostre os grupos de `coletor.py --listar-sites` e pergunte com AskUserQuestion, `multiSelect: true`:
+     - LinkedIn (busca booleana);
+     - Big Techs;
+     - Bancos e fintechs;
+     - Empresas de tecnologia.
+
+     Ele pode citar sites específicos (ex.: `microsoft`).
+     - Pergunte em quais empresas ele quer **todas** as vagas, não só as da trilha (`busca.todas_as_vagas`, padrão Microsoft, Amazon e Google).
+     - Se escolher o LinkedIn, pergunte:
+       - temas para o AND da busca booleana (`busca.linkedin.temas`, ex.: IA, cloud);
+       - período (`24h`, `semana`, `mes`);
+       - se quer só vagas remotas.
    - **Palavras-chave:** proponha pesos a partir do currículo (1 a 6) e peça confirmação.
    - **Candidatura automática:** explique que só ocorre em formulários públicos, sem login nem CAPTCHA; padrão **desligado**.
    - **Formulários (opcional):** empresa atual, remuneração, pretensão por trilha, regra PJ, disponibilidade, modelo, autoidentificação.

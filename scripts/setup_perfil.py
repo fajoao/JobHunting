@@ -69,6 +69,17 @@ def main():
         pat = '(' + '|'.join(t.lower() for t in termos) + ')'
         trilhas.append({'nome': n, 'titulos': pat, 'titulos_fortes': pat})
     b['trilhas'] = trilhas
+    print('\n-- Onde buscar --')
+    print('Grupos: linkedin (busca booleana), big_techs (Microsoft, Amazon, Google, NVIDIA, Salesforce, Red Hat, Oracle, Dell),')
+    print('        bancos (bancos e fintechs), tech (empresas de tecnologia). Também aceita um site, ex.: microsoft.')
+    print('Liste tudo com: python3 -I scripts/coletor.py --listar-sites')
+    b['sites'] = [x.lower() for x in lista('Em quais sites buscar vagas? (todos = tudo)', b.get('sites') or ['todos'])]
+    b['todas_as_vagas'] = [x.lower() for x in lista('Empresas em que você quer TODAS as vagas, não só as da sua trilha', b.get('todas_as_vagas', ['microsoft', 'amazon', 'google']))]
+    if 'linkedin' in b['sites'] or 'todos' in b['sites']:
+        li = b.setdefault('linkedin', {})
+        li['temas'] = lista('LinkedIn: temas para o AND da busca booleana (ex.: IA, cloud; vazio = só títulos)', li.get('temas', []))
+        li['periodo'] = perguntar('LinkedIn: período das vagas (24h, semana, mes; vazio = qualquer)', li.get('periodo', ''))
+        li['so_remoto'] = sim_nao('LinkedIn: só vagas remotas?', li.get('so_remoto', False))
     loc = b['locais']
     loc['aceita_remoto_brasil'] = sim_nao('Aceita trabalho remoto no Brasil?', loc['aceita_remoto_brasil'])
     loc['cidades_aceitas'] = [c.lower() for c in lista('Cidades aceitas para híbrido/presencial', loc['cidades_aceitas'])]

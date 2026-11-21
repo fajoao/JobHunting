@@ -23,6 +23,27 @@
         "titulos_fortes": "(tech manager|engineering manager|gerente de (tecnologia|engenharia|ti)|it manager)"
       }
     ],
+    "sites": [
+      "linkedin",
+      "big_techs",
+      "bancos",
+      "tech"
+    ],
+    "todas_as_vagas": [
+      "microsoft",
+      "amazon",
+      "google"
+    ],
+    "linkedin": {
+      "temas": [
+        "IA",
+        "AI",
+        "inteligência artificial",
+        "automação"
+      ],
+      "periodo": "semana",
+      "so_remoto": false
+    },
     "senioridade_excluida": "\\b(jr|junior|pleno|estagi\\w*|intern(ship)?|aprendiz|trainee|assistente|auxiliar|banco de talentos|talent pool)\\b",
     "titulos_excluidos": "(vendas|sales|account executive|comercial|recruiter|marketing|contabil|fiscal)",
     "locais": {

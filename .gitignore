@@ -14,3 +14,4 @@ node_modules/
 app/dist/
 app/publish/
 .DS_Store
+__pycache__/
