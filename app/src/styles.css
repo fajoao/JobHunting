@@ -151,6 +151,8 @@
 .jh-bars b { text-align: right; font-variant-numeric: tabular-nums; }
 
 /* Job list */
+.jh-filtros { display: flex; flex-wrap: wrap; gap: 8px; }
+.jh-filtros .dash-select { max-width: 100%; }
 .jh-listhead { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .jh-list { display: grid; gap: 10px; }
 .jh-job {

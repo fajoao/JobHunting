@@ -68,7 +68,7 @@ python3 -m venv ~/.jobhunting/venv
 | **Guia de recrutadores** | 4 textos com os dados da pessoa, busca booleana dos cargos-alvo e 8 táticas de vagas ocultas com exemplos personalizados | PDF e DOCX em `linkedin/` |
 | **Plano de SSI no LinkedIn** | Pilares do SSI, como e quando postar, como comentar, rotina diária, vagas ocultas por empresa, calendário de 30 dias com datas e 13 posts | PDF e DOCX em `linkedin/` |
 | **LinkedIn no dia a dia** | Abre a busca booleana de vagas, lista recrutadores, confere quem aceitou o convite, prepara o follow-up e registra tudo | `contatos.csv` |
-| **Painel web** | KPIs, funil, gráficos de match, lista de vagas (Abrir, Marcar como aplicada, Excluir), botão "Buscar agora" e progresso das buscas. Os filtros de trilha vêm das trilhas que a pessoa escolheu na entrevista (mais "Outras vagas", se houver) | Artifact do Claude (tipo Dashboard) |
+| **Painel web** | KPIs, funil, gráficos de match, lista de vagas com filtro por empresa e por situação (Abrir, Marcar como aplicada, Excluir), botão "Buscar agora" e progresso das buscas. Os filtros de trilha vêm das trilhas que a pessoa escolheu na entrevista (mais "Outras vagas", se houver) | Artifact do Claude (tipo Dashboard) |
 | **Rotinas** | Busca por trilha 2x ao dia, resumo diário, verificador do "Buscar agora" e Texto 2 no LinkedIn | Rotinas na nuvem e tarefas locais |
 
 ---

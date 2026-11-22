@@ -107,9 +107,15 @@ export function Vagas({ trilha }: { trilha: string }) {
   const semPerfil = trilha === 'Outras vagas'
   const [filtro, setFiltro] = useState<Filtro>(semPerfil ? 'todas' : 'perfil')
   useEffect(() => setFiltro(semPerfil ? 'todas' : 'perfil'), [semPerfil])
+  const [empresa, setEmpresa] = useState('')
+  useEffect(() => setEmpresa(''), [trilha])
   const [erro, setErro] = useState(false)
   const [saindo, setSaindo] = useState<Set<string>>(new Set())
-  const lista = filtrar(rows, filtro)
+  const porSituacao = filtrar(rows, filtro)
+  // Company options with counts, from the jobs left after the status filter.
+  const empresas = [...porSituacao.reduce((m, r) => m.set(r.empresa, (m.get(r.empresa) ?? 0) + 1), new Map<string, number>())]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  const lista = empresa ? porSituacao.filter((r) => r.empresa === empresa) : porSituacao
 
   async function mudar(id: string, s: Status) {
     if (s === 'excluida') setSaindo((x) => new Set(x).add(id))
@@ -137,6 +143,16 @@ export function Vagas({ trilha }: { trilha: string }) {
               : 'Ordenadas pelo match. Abra a vaga, use o currículo pronto e marque quando aplicar.'}
           </p>
         </div>
+        <div className="jh-filtros">
+        <select className="dash-select" aria-label="Filtrar por empresa" value={empresa} onChange={(e) => setEmpresa(e.target.value)}>
+          <option value="">Todas as empresas ({porSituacao.length})</option>
+          {empresas.map(([nome, n]) => (
+            <option key={nome} value={nome}>
+              {nome} ({n})
+            </option>
+          ))}
+          {empresa && !empresas.some(([nome]) => nome === empresa) && <option value={empresa}>{empresa} (0)</option>}
+        </select>
         <select className="dash-select" aria-label="Filtrar por situação" value={filtro} onChange={(e) => setFiltro(e.target.value as Filtro)}>
           <option value="perfil">Dentro do perfil (65+)</option>
           <option value="pendente">Pendentes você aplicar</option>
@@ -145,6 +161,7 @@ export function Vagas({ trilha }: { trilha: string }) {
           <option value="abaixo">Abaixo de 65</option>
           <option value="todas">Todas</option>
         </select>
+        </div>
       </div>
       {erro && <p className="jh-err">Não foi salvo. Só editores do dashboard podem marcar vagas.</p>}
       <div className="jh-list" data-source="vagas">
