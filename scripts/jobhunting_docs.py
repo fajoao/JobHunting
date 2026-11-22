@@ -18,8 +18,30 @@ Blocos aceitos (dicts com "t"):
   tabela {cabecalho, linhas, larguras?, destacar?}
   espaco, quebra_pagina
 Requer: pip install reportlab python-docx
+Se o pip recusar instalar no Python do sistema (PEP 668), crie o ambiente do JobHunting:
+    python3 -m venv ~/.jobhunting/venv && ~/.jobhunting/venv/bin/pip install -r scripts/requirements.txt
+Os scripts passam a usá-lo sozinhos: se faltar o reportlab, reiniciam com ~/.jobhunting/venv/bin/python.
 """
-import os, re
+import os, re, sys
+
+
+def _usar_venv_se_preciso():
+    """Sem reportlab/python-docx no Python atual, reinicia o script com o venv do JobHunting, se existir."""
+    try:
+        import reportlab, docx  # noqa: F401
+        return
+    except ImportError:
+        pass
+    home = os.path.expanduser(os.environ.get('JOBHUNTING_HOME', '~/.jobhunting'))
+    venv = os.path.join(home, 'venv')
+    py = os.path.join(venv, 'bin', 'python')
+    ja_no_venv = os.path.realpath(sys.prefix) == os.path.realpath(venv)
+    if os.path.exists(py) and not ja_no_venv and not os.environ.get('JOBHUNTING_NO_VENV'):
+        os.environ['JOBHUNTING_NO_VENV'] = '1'  # evita laço se o venv também estiver incompleto
+        os.execv(py, [py] + sys.argv)
+
+
+_usar_venv_se_preciso()
 
 CINZA = (0x55, 0x55, 0x55)
 CINZA_CLARO = (0x88, 0x88, 0x88)

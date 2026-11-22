@@ -9,7 +9,7 @@
       "name": "jobhunting",
       "source": "./",
       "description": "Assistente de busca de emprego: vagas com match, currículo, recrutadores, painel e rotinas.",
-      "version": "0.6.2"
+      "version": "0.6.3"
     }
   ]
 }

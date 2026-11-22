@@ -49,6 +49,12 @@ pip install -r scripts/requirements.txt   # reportlab e python-docx (PDF e DOCX)
 ```
 Python 3.9 ou mais recente. O coletor de vagas usa só a biblioteca padrão.
 
+Se o `pip` recusar instalar no Python do sistema (erro "externally-managed-environment", comum no Python do Homebrew), crie o ambiente do JobHunting. Os scripts passam a usá-lo sozinhos:
+```bash
+python3 -m venv ~/.jobhunting/venv
+~/.jobhunting/venv/bin/pip install -r scripts/requirements.txt
+```
+
 ---
 
 ## O que a aplicação faz
