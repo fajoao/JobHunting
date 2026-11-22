@@ -16,6 +16,22 @@ Nenhum dado pessoal fica neste repositório: tudo vem do perfil local da pessoa 
 
 > Arquitetura e diagramas: [docs/arquitetura.md](docs/arquitetura.md) · Privacidade: [docs/privacidade.md](docs/privacidade.md) · Segurança: [SECURITY.md](SECURITY.md)
 
+## Sumário
+- [Instalação](#instalação)
+- [O que a aplicação faz](#o-que-a-aplicação-faz)
+- [Agentes](#agentes)
+- [**Modelos: o que cada agente e skill usa** (Opus, Sonnet e Haiku)](#modelos-o-que-cada-agente-e-skill-usa)
+- [Skills](#skills)
+- [Funciona em outras IAs?](#funciona-em-outras-ias)
+- [Roda na versão gratuita do Claude, ChatGPT ou Gemini?](#roda-na-versão-gratuita-do-claude-chatgpt-ou-gemini)
+- [Uso sem nenhuma IA](#uso-sem-nenhuma-ia)
+- [Dica: envie o currículo em Markdown](#dica-envie-o-currículo-em-markdown)
+- [Seus dados](#seus-dados)
+- [Limites e uso responsável](#limites-e-uso-responsável)
+- [Perguntas frequentes (FAQ)](#perguntas-frequentes-faq)
+- [Estrutura do repositório](#estrutura-do-repositório)
+- [Contribuindo](#contribuindo)
+
 ---
 
 ## Instalação
@@ -231,6 +247,9 @@ O JobHunting **nunca pede CPF, RG, dados bancários ou senhas**. Detalhes em [do
 ## Perguntas frequentes (FAQ)
 
 ### Começando
+
+**Qual modelo de IA cada parte usa?**
+Opus 5.5 no orquestrador, no currículo e no setup; Sonnet 5.5 na carta e no plano de SSI; Haiku 5.5 em toda a execução (coleta, recrutadores, painel, rotinas e geração dos arquivos). A tabela completa, com o motivo de cada escolha, está em [Modelos: o que cada agente e skill usa](#modelos-o-que-cada-agente-e-skill-usa).
 
 **O que é o JobHunting?**
 Um assistente de busca de emprego. Ele encontra vagas com match ao seu perfil e monta o currículo ATS, a carta de apresentação, o plano de crescimento no LinkedIn e as mensagens para recrutadores. Roda como plugin do Claude Code, e os scripts também funcionam sem nenhuma IA.
