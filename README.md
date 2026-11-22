@@ -57,8 +57,8 @@ Python 3.9 ou mais recente. O coletor de vagas usa só a biblioteca padrão.
 |---|---|---|---|
 | **`jobhunting`** (orquestrador) | Opus 5.5 | Confere se existe perfil (senão roda o setup), entende o pedido, decide o caminho e delega aos subagentes, em paralelo quando possível (ex.: currículo e carta para a mesma vaga; kit de início). Aplica as regras de privacidade, verdade e confirmação de ações externas. Fecha cada tarefa dizendo o que foi feito e o próximo passo. | Read, Write, Edit, Bash, Glob, Grep, WebFetch, Skill, Task, AskUserQuestion |
 | **`jobhunting-curriculo`** | Opus 5.5 | Adapta o currículo ATS à trilha ou à vaga: mapeia requisitos para fatos do perfil, reordena e reescreve sem inventar e aponta lacunas. Entrega o `ajustes.json`. | Read, Write, Bash, WebFetch, Skill |
-| **`jobhunting-carta`** | Opus 5.5 | Escreve a carta de 4 parágrafos citando um desafio real da vaga. Entrega o `carta.json`. | Read, Write, Bash, WebFetch, Skill |
-| **`jobhunting-linkedin-crescimento`** | Opus 5.5 | Cria a estratégia de 30 dias para o SSI e escreve os 13 posts a partir da trajetória da pessoa. Entrega o `plano.json`. Não publica por ela. | Read, Write, Bash, Skill, AskUserQuestion |
+| **`jobhunting-carta`** | Sonnet 5.5 | Escreve a carta de 4 parágrafos citando um desafio real da vaga. Entrega o `carta.json`. | Read, Write, Bash, WebFetch, Skill |
+| **`jobhunting-linkedin-crescimento`** | Sonnet 5.5 | Cria a estratégia de 30 dias para o SSI e escreve os 13 posts a partir da trajetória da pessoa. Entrega o `plano.json`. Não publica por ela. | Read, Write, Bash, Skill, AskUserQuestion |
 | **`jobhunting-executor`** | Haiku 5.5 | Executa o que já foi decidido: roda os geradores a partir dos JSON, confere páginas e arquivos, instala dependências, roda a coleta e grava dados. Não decide conteúdo. | Read, Write, Edit, Bash, Glob, Grep |
 | **`jobhunting-coletor`** | Haiku 5.5 | Roda o coletor, revisa o match lendo as descrições (ajusta até ±10 pontos, com o motivo), marca as vagas novas e devolve uma tabela com links. Nunca se candidata. | Read, Write, Bash, Glob, Grep, WebFetch, Skill |
 | **`jobhunting-recrutadores`** | Haiku 5.5 | Gera o guia de abordagem e cuida do dia a dia com recrutadores a partir dos modelos. Por padrão só prepara as mensagens; confere registro e histórico para nunca repetir uma mensagem. | Read, Write, Edit, Bash, Glob, Grep, Skill |
@@ -67,18 +67,52 @@ Diagrama do orquestrador: [docs/arquitetura.md#2-um-agente-jobhunting-orquestrad
 
 ---
 
-## Modelos: Opus para estratégia, Haiku para execução
+## Modelos: o que cada agente e skill usa
 
-Para gastar menos do plano sem perder qualidade, cada agente e skill declara o modelo no frontmatter (`model:`):
+Cada agente e skill declara o modelo no topo do arquivo (campo `model:`). A regra é usar o modelo mais forte só onde um erro custa caro, e o mais barato no que roda com frequência.
 
-| Tipo de trabalho | Modelo | Agentes | Skills |
+### Os três níveis
+| Nível | Modelo | Quando usar |
+|---|---|---|
+| **Crítico** | **Opus 5.5** (`claude-opus-5-5`) | O erro chega ao recrutador ou se repete em todas as buscas seguintes |
+| **Escrita com modelo fixo** | **Sonnet 5.5** (`claude-sonnet-5-5`) | Textos que seguem um modelo e que a pessoa revisa antes de usar |
+| **Execução** | **Haiku 5.5** (`claude-haiku-5-5`) | Tarefas já decididas: rodar scripts, preencher modelos, gravar dados. Rodam todo dia. |
+
+### Configuração atual
+| Tipo | Nome | Modelo | Por quê |
 |---|---|---|---|
-| **Estratégia e escrita pesada:** entender o pedido e decidir o caminho, montar o perfil, adaptar currículo e carta, criar o plano de SSI e os posts | **Opus 5.5** (`claude-opus-5-5`) | `jobhunting`, `jobhunting-curriculo`, `jobhunting-carta`, `jobhunting-linkedin-crescimento` | `setup`, `curriculo`, `carta`, `plano-ssi` |
-| **Execução:** rodar scripts, coletar vagas, gerar PDF e DOCX, preencher modelos, gravar no painel, criar rotinas, registrar contatos | **Haiku 5.5** (`claude-haiku-5-5`) | `jobhunting-executor`, `jobhunting-coletor`, `jobhunting-recrutadores` | `buscar-vagas`, `abordagem-recrutadores`, `linkedin`, `dashboard`, `rotinas` |
+| Agente | `jobhunting` (orquestrador) | **Opus 5.5** | Entende o pedido, decide o caminho, aplica as regras e revisa o que os outros entregam |
+| Agente | `jobhunting-curriculo` | **Opus 5.5** | Liga cada requisito da vaga ao que o perfil comprova sem exagerar, e aponta lacunas. Um currículo fraco ou inflado vai direto ao recrutador. |
+| Skill | `jobhunting-setup` | **Opus 5.5** | Transforma o CV em perfil e cria as regras de título de cada trilha. Uma regra errada faz o coletor perder ou trazer vagas erradas em **todas** as buscas. |
+| Skill | `jobhunting-curriculo` | **Opus 5.5** | Mesmo motivo do agente de currículo |
+| Agente | `jobhunting-carta` | **Sonnet 5.5** | Quatro parágrafos com estrutura fixa e fatos que vêm do perfil. A pessoa revisa antes de enviar. |
+| Agente | `jobhunting-linkedin-crescimento` | **Sonnet 5.5** | Plano e 13 posts a partir de arquétipos prontos. Nada é publicado sem revisão da pessoa. |
+| Skill | `jobhunting-carta` | **Sonnet 5.5** | Mesmo motivo do agente de carta |
+| Skill | `jobhunting-plano-ssi` | **Sonnet 5.5** | Mesmo motivo do agente de crescimento |
+| Agente | `jobhunting-executor` | **Haiku 5.5** | Gera PDF e DOCX a partir de JSON pronto, confere os arquivos, roda a coleta e grava dados. Não decide conteúdo. |
+| Agente | `jobhunting-coletor` | **Haiku 5.5** | Roda o coletor e revisa o match dentro de um limite de ±10 pontos. Roda várias vezes por dia. |
+| Agente | `jobhunting-recrutadores` | **Haiku 5.5** | Preenche os 4 textos a partir do modelo e mantém o registro de contatos |
+| Skill | `jobhunting-buscar-vagas` | **Haiku 5.5** | Pergunta os sites, roda o coletor e monta a tabela |
+| Skill | `jobhunting-abordagem-recrutadores` | **Haiku 5.5** | Preenche o guia a partir do modelo |
+| Skill | `jobhunting-linkedin` | **Haiku 5.5** | Monta a busca booleana e o registro de contatos |
+| Skill | `jobhunting-dashboard` | **Haiku 5.5** | Build e gravação dos dados no painel |
+| Skill | `jobhunting-rotinas` | **Haiku 5.5** | Preenche os modelos de rotina e cria os agendamentos |
 
-**Como o trabalho flui:** os agentes Opus escrevem o conteúdo (o JSON do currículo, da carta ou do plano) e param. O orquestrador manda o `jobhunting-executor` (Haiku) gerar o PDF e o DOCX a partir desse JSON. Se o Haiku errar duas vezes, ou se a tarefa pedir julgamento, o orquestrador devolve a tarefa para um agente Opus.
+### Como o trabalho flui
+1. O orquestrador (Opus) entende o pedido e escolhe o caminho.
+2. Os agentes de conteúdo escrevem só o JSON: o currículo no Opus, a carta e o plano no Sonnet.
+3. O orquestrador revisa o que veio do Sonnet. Se encontrar algo inventado ou genérico demais, refaz essa parte.
+4. O `jobhunting-executor` (Haiku) gera o PDF e o DOCX a partir do JSON e confere o resultado.
+5. Se o Haiku errar duas vezes, ou se a tarefa pedir julgamento, ela volta para o Opus.
 
-**Para trocar:** edite o campo `model:` no topo do arquivo do agente (`agents/*.md`) ou da skill (`skills/*/SKILL.md`). Aceita um ID de modelo ou um apelido (`opus`, `sonnet`, `haiku`, `inherit`). O `scripts/checar_seguranca.py` confere se todos têm um modelo válido.
+Quando uma skill de escrita é usada direto, sem o orquestrador, ela roda inteira no modelo dela, inclusive a geração dos arquivos.
+
+### Por que não usar o Haiku em tudo
+- **Custo:** setup, currículo, carta e plano rodam poucas vezes (uma vez por vaga, ou por mês). O que consome o plano todo dia é a coleta e as rotinas, e essas já estão no Haiku. Rebaixar as tarefas de conteúdo economizaria pouco.
+- **Risco:** no currículo e no setup, um modelo menor tende a enfeitar fatos ou errar as regras de busca, e o erro se propaga. Na carta e no plano, o Sonnet mantém a qualidade com custo menor, e a pessoa revisa antes de usar.
+
+### Para trocar
+Edite o campo `model:` no topo do agente (`agents/*.md`) ou da skill (`skills/*/SKILL.md`). Aceita um ID de modelo (`claude-...`) ou um apelido (`opus`, `sonnet`, `haiku`, `inherit`). O `scripts/checar_seguranca.py` confere se todos têm um modelo válido.
 
 ---
 
@@ -89,8 +123,8 @@ Para gastar menos do plano sem perder qualidade, cada agente e skill declara o m
 | `jobhunting-setup` | Opus 5.5 | Entrevista, monta o perfil (inclusive a partir do CV atual) e oferece o kit de início | `setup_perfil.py`, `profile.example.json` |
 | `jobhunting-buscar-vagas` | Haiku 5.5 | Busca vagas agora e mostra as melhores com link, sem se candidatar | `coletor.py` |
 | `jobhunting-curriculo` | Opus 5.5 | Currículo no modelo ATS para uma trilha ou vaga | `gerador_cv.py`, `templates/curriculo/modelo-ats.md` |
-| `jobhunting-carta` | Opus 5.5 | Carta de apresentação no modelo de 4 parágrafos | `gerador_carta.py`, `templates/carta/modelo-carta.md` |
-| `jobhunting-plano-ssi` | Opus 5.5 | Plano de crescimento do SSI com calendário e 13 posts | `gerador_plano_ssi.py`, `templates/linkedin/plano-ssi.md` |
+| `jobhunting-carta` | Sonnet 5.5 | Carta de apresentação no modelo de 4 parágrafos | `gerador_carta.py`, `templates/carta/modelo-carta.md` |
+| `jobhunting-plano-ssi` | Sonnet 5.5 | Plano de crescimento do SSI com calendário e 13 posts | `gerador_plano_ssi.py`, `templates/linkedin/plano-ssi.md` |
 | `jobhunting-abordagem-recrutadores` | Haiku 5.5 | Guia com os 4 textos, a busca booleana e as vagas ocultas | `gerador_guia_recrutadores.py`, `templates/linkedin/abordagem-recrutadores.md` |
 | `jobhunting-linkedin` | Haiku 5.5 | Busca booleana de vagas, recrutadores, quem aceitou, follow-up e registro | `templates/mensagens-recrutadores.md`, `contatos.csv` |
 | `jobhunting-dashboard` | Haiku 5.5 | Cria ou atualiza o painel (build React, datasets, perfil privado para as rotinas) | `app/` |

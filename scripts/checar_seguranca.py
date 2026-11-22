@@ -65,7 +65,7 @@ def checar_frontmatter():
             erros.append(f'{rel}: description precisa estar entre aspas duplas (YAML quebra com ": ")')
         modelo = campos.get('model', '')
         if modelo not in MODELOS_VALIDOS and not re.fullmatch(r'claude-[a-z0-9-]+', modelo):
-            erros.append(f'{rel}: model ausente ou inválido ("{modelo}"); use claude-opus-5-5 (estratégia) ou claude-haiku-5-5 (execução)')
+            erros.append(f'{rel}: model ausente ou inválido ("{modelo}"); use claude-opus-5-5 (crítico), claude-sonnet-5-5 (escrita) ou claude-haiku-5-5 (execução)')
     return erros
 
 

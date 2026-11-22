@@ -1,6 +1,6 @@
 {
   "name": "jobhunting",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "JobHunting: assistente de busca de emprego para o Claude Code. Coleta vagas em portais públicos, calcula o match com o seu perfil, adapta o currículo, prepara mensagens para recrutadores, publica um painel e agenda rotinas.",
   "author": {
     "name": "fajoao",

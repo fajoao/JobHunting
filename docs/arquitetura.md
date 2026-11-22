@@ -11,11 +11,11 @@ flowchart TB
     subgraph CC["Claude Code + plugin jobhunting"]
         direction TB
         ORQ["Agente orquestrador<br/>jobhunting · Opus 5.5"]
-        subgraph SUB["Subagentes de estratégia · Opus 5.5"]
+        subgraph SUB["Subagentes de conteúdo"]
             direction LR
-            A2[jobhunting-curriculo]
-            A3[jobhunting-carta]
-            A4[jobhunting-linkedin-crescimento]
+            A2["jobhunting-curriculo · Opus 5.5"]
+            A3["jobhunting-carta · Sonnet 5.5"]
+            A4["jobhunting-linkedin-crescimento · Sonnet 5.5"]
         end
         subgraph EXE["Subagentes de execução · Haiku 5.5"]
             direction LR
@@ -101,8 +101,8 @@ flowchart TD
     ROUTE -- vagas --> T1[["Task: jobhunting-coletor (Haiku)"]]
     ROUTE -- "pacote para uma vaga" --> PAR{{em paralelo}}
     PAR --> T2[["Task: jobhunting-curriculo (Opus)<br/>escreve ajustes.json"]]
-    PAR --> T3[["Task: jobhunting-carta (Opus)<br/>escreve carta.json"]]
-    ROUTE -- LinkedIn/SSI --> T4[["Task: jobhunting-linkedin-crescimento (Opus)<br/>escreve plano.json"]]
+    PAR --> T3[["Task: jobhunting-carta (Sonnet)<br/>escreve carta.json"]]
+    ROUTE -- LinkedIn/SSI --> T4[["Task: jobhunting-linkedin-crescimento (Sonnet)<br/>escreve plano.json"]]
     T2 & T3 & T4 --> EX[["Task: jobhunting-executor (Haiku)<br/>gera PDF e DOCX e confere"]]
     ROUTE -- recrutadores --> T5[["Task: jobhunting-recrutadores (Haiku)"]]
     ROUTE -- "painel / automatizar" --> D[["Task: jobhunting-executor (Haiku)<br/>skills dashboard e rotinas"]]

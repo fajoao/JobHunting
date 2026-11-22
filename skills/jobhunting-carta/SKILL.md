@@ -1,7 +1,7 @@
 ---
 name: jobhunting-carta
 description: "Escreve a carta de apresentação no modelo do JobHunting (cabeçalho igual ao currículo, 4 parágrafos: interesse, trajetória, resultado e contribuição), em PDF e DOCX, com os dados da pessoa e adaptada à vaga ou à trilha. Use quando o usuário pedir carta de apresentação, cover letter ou \"carta para a vaga\"."
-model: claude-opus-5-5
+model: claude-sonnet-5-5
 ---
 
 # JobHunting – carta de apresentação
