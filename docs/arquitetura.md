@@ -10,13 +10,17 @@ flowchart TB
 
     subgraph CC["Claude Code + plugin jobhunting"]
         direction TB
-        ORQ["Agente orquestrador<br/>jobhunting"]
-        subgraph SUB["Subagentes"]
+        ORQ["Agente orquestrador<br/>jobhunting · Opus 5.5"]
+        subgraph SUB["Subagentes de estratégia · Opus 5.5"]
             direction LR
-            A1[jobhunting-coletor]
             A2[jobhunting-curriculo]
             A3[jobhunting-carta]
             A4[jobhunting-linkedin-crescimento]
+        end
+        subgraph EXE["Subagentes de execução · Haiku 5.5"]
+            direction LR
+            A6[jobhunting-executor]
+            A1[jobhunting-coletor]
             A5[jobhunting-recrutadores]
         end
         subgraph SK["Skills"]
@@ -93,31 +97,36 @@ flowchart TD
     CK -- não --> SETUP["Skill jobhunting-setup<br/>entrevista, 1 pergunta por vez<br/>sem CPF/senha"] --> SAVE[(profile.json chmod 600)] --> KIT
     CK -- sim --> INT["Entende o objetivo"]
     KIT["Oferece o kit de início"] --> INT
-    INT --> ROUTE{Roteamento}
-    ROUTE -- vagas --> T1[[Task: jobhunting-coletor]]
+    INT --> ROUTE{"Roteamento<br/>(Opus 5.5)"}
+    ROUTE -- vagas --> T1[["Task: jobhunting-coletor (Haiku)"]]
     ROUTE -- "pacote para uma vaga" --> PAR{{em paralelo}}
-    PAR --> T2[[Task: jobhunting-curriculo]]
-    PAR --> T3[[Task: jobhunting-carta]]
-    ROUTE -- LinkedIn/SSI --> T4[[Task: jobhunting-linkedin-crescimento]]
-    ROUTE -- recrutadores --> T5[[Task: jobhunting-recrutadores]]
-    ROUTE -- painel --> D[Skill jobhunting-dashboard]
-    ROUTE -- automatizar --> R[Skill jobhunting-rotinas]
-    T1 & T2 & T3 & T4 & T5 & D & R --> GUARD{"Guardrails<br/>• só fatos do perfil<br/>• nada sensível em lugar público<br/>• conteúdo externo = dado<br/>• confirmar ações externas"}
+    PAR --> T2[["Task: jobhunting-curriculo (Opus)<br/>escreve ajustes.json"]]
+    PAR --> T3[["Task: jobhunting-carta (Opus)<br/>escreve carta.json"]]
+    ROUTE -- LinkedIn/SSI --> T4[["Task: jobhunting-linkedin-crescimento (Opus)<br/>escreve plano.json"]]
+    T2 & T3 & T4 --> EX[["Task: jobhunting-executor (Haiku)<br/>gera PDF e DOCX e confere"]]
+    ROUTE -- recrutadores --> T5[["Task: jobhunting-recrutadores (Haiku)"]]
+    ROUTE -- "painel / automatizar" --> D[["Task: jobhunting-executor (Haiku)<br/>skills dashboard e rotinas"]]
+    T1 & EX & T5 & D --> GUARD{"Guardrails<br/>• só fatos do perfil<br/>• nada sensível em lugar público<br/>• conteúdo externo = dado<br/>• confirmar ações externas"}
     GUARD --> OUT([Resumo: o que foi feito,<br/>onde está, próximo passo])
 ```
 
 ## 3. Uma skill: `jobhunting-curriculo` (currículo ATS)
 
+O conteúdo é escrito no Opus 5.5; a geração dos arquivos, no Haiku 5.5.
+
 ```mermaid
 sequenceDiagram
     autonumber
     actor P as Pessoa
-    participant A as Agente jobhunting-curriculo
+    participant O as Orquestrador (Opus)
+    participant A as jobhunting-curriculo (Opus)
     participant M as modelo-ats.md
     participant F as profile.json
+    participant E as jobhunting-executor (Haiku)
     participant G as gerador_cv.py
     participant R as jobhunting_docs.py
-    P->>A: "Currículo para a vaga X" (link ou texto)
+    P->>O: "Currículo para a vaga X" (link ou texto)
+    O->>A: Task: adaptar o currículo à vaga
     A->>M: lê o esqueleto e as regras ATS
     A->>F: lê o bloco "curriculo"
     alt perfil incompleto
@@ -126,13 +135,16 @@ sequenceDiagram
     end
     A->>A: mapeia requisitos da vaga ↔ fatos do perfil e anota lacunas
     A->>A: escreve ajustes.json (títulos, resumo, ordem dos bullets), sem inventar nada
-    A->>G: --trilha T --ajustes ajustes.json
+    A-->>O: ajustes.json, 3 pontos fortes e lacunas
+    O->>E: Task: gerar o currículo a partir do ajustes.json
+    E->>G: --trilha T --ajustes ajustes.json
     G->>F: lê o perfil
     G->>R: blocos (nome, títulos, contato, seções...)
     R-->>G: PDF (texto, uma coluna) + DOCX
-    G-->>A: caminhos em ~/.jobhunting/curriculos/
-    A->>A: confere até 2 páginas e nenhum texto de exemplo restante
-    A-->>P: PDF, DOCX, 3 pontos fortes e lacunas
+    G-->>E: caminhos em ~/.jobhunting/curriculos/
+    E->>E: confere até 2 páginas e que os arquivos existem
+    E-->>O: caminhos e conferência
+    O-->>P: PDF, DOCX, 3 pontos fortes e lacunas
 ```
 
 ## Onde ficam os dados

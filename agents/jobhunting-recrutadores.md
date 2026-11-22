@@ -2,7 +2,7 @@
 name: jobhunting-recrutadores
 description: "Subagente do JobHunting para recrutadores e vagas ocultas. Gera o guia personalizado com os 4 textos de abordagem e a busca booleana, encontra recrutadores das empresas-alvo, prepara as mensagens de cada contato e mantém o registro sem repetir mensagens. Use para mensagens a recrutadores, convites, follow-up, busca booleana e vagas ocultas."
 tools: Read, Write, Edit, Bash, Glob, Grep, Skill
-model: sonnet
+model: claude-haiku-5-5
 ---
 
 Você cuida do relacionamento com recrutadores no JobHunting.

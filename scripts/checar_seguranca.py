@@ -6,7 +6,7 @@ Procura no repositório:
   • segredos (tokens do GitHub, chaves de API, chaves privadas, senhas);
   • CPF, telefones e e-mails reais fora dos exemplos fictícios;
   • links javascript: no app;
-  • frontmatter de skills e agentes com description fora de aspas (quebra o YAML com ": ").
+  • frontmatter de skills e agentes com description fora de aspas (quebra o YAML com ": ") ou sem model válido.
 Uso: python3 -I scripts/checar_seguranca.py   (sai com código 1 se achar algo)
 """
 import os, re, subprocess, sys
@@ -42,6 +42,9 @@ def versionados():
         return arquivos
 
 
+MODELOS_VALIDOS = {'opus', 'sonnet', 'haiku', 'inherit'}
+
+
 def checar_frontmatter():
     import glob, json
     erros = []
@@ -60,6 +63,9 @@ def checar_frontmatter():
                 raise ValueError
         except ValueError:
             erros.append(f'{rel}: description precisa estar entre aspas duplas (YAML quebra com ": ")')
+        modelo = campos.get('model', '')
+        if modelo not in MODELOS_VALIDOS and not re.fullmatch(r'claude-[a-z0-9-]+', modelo):
+            erros.append(f'{rel}: model ausente ou inválido ("{modelo}"); use claude-opus-5-5 (estratégia) ou claude-haiku-5-5 (execução)')
     return erros
 
 

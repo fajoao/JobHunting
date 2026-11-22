@@ -53,32 +53,48 @@ Python 3.9 ou mais recente. O coletor de vagas usa só a biblioteca padrão.
 
 ## Agentes
 
-| Agente | Papel | Ferramentas |
-|---|---|---|
-| **`jobhunting`** (orquestrador) | Confere se existe perfil (senão roda o setup), entende o pedido e delega aos subagentes, em paralelo quando possível (ex.: currículo e carta para a mesma vaga; kit de início). Aplica as regras de privacidade, verdade e confirmação de ações externas. Fecha cada tarefa dizendo o que foi feito e o próximo passo. | Read, Write, Edit, Bash, Glob, Grep, WebFetch, Skill, Task, AskUserQuestion |
-| **`jobhunting-coletor`** | Roda o coletor, revisa o match lendo as descrições (ajusta até ±10 pontos, com o motivo), marca as vagas novas e devolve uma tabela com links. Nunca se candidata. | Read, Write, Bash, Glob, Grep, WebFetch, Skill |
-| **`jobhunting-curriculo`** | Monta o currículo ATS por trilha ou vaga: mapeia requisitos para fatos do perfil, reordena e reescreve sem inventar, confere o PDF e aponta lacunas. | Read, Write, Bash, WebFetch, Skill |
-| **`jobhunting-carta`** | Escreve a carta de 4 parágrafos citando um desafio real da vaga e gera o PDF e o DOCX. | Read, Write, Bash, WebFetch, Skill |
-| **`jobhunting-linkedin-crescimento`** | Cria o plano de 30 dias para o SSI e escreve os 13 posts a partir da trajetória da pessoa. Não publica por ela. | Read, Write, Bash, Skill, AskUserQuestion |
-| **`jobhunting-recrutadores`** | Gera o guia de abordagem e cuida do dia a dia com recrutadores. Por padrão só prepara as mensagens; confere registro e histórico para nunca repetir uma mensagem. | Read, Write, Edit, Bash, Glob, Grep, Skill |
+| Agente | Modelo | Papel | Ferramentas |
+|---|---|---|---|
+| **`jobhunting`** (orquestrador) | Opus 5.5 | Confere se existe perfil (senão roda o setup), entende o pedido, decide o caminho e delega aos subagentes, em paralelo quando possível (ex.: currículo e carta para a mesma vaga; kit de início). Aplica as regras de privacidade, verdade e confirmação de ações externas. Fecha cada tarefa dizendo o que foi feito e o próximo passo. | Read, Write, Edit, Bash, Glob, Grep, WebFetch, Skill, Task, AskUserQuestion |
+| **`jobhunting-curriculo`** | Opus 5.5 | Adapta o currículo ATS à trilha ou à vaga: mapeia requisitos para fatos do perfil, reordena e reescreve sem inventar e aponta lacunas. Entrega o `ajustes.json`. | Read, Write, Bash, WebFetch, Skill |
+| **`jobhunting-carta`** | Opus 5.5 | Escreve a carta de 4 parágrafos citando um desafio real da vaga. Entrega o `carta.json`. | Read, Write, Bash, WebFetch, Skill |
+| **`jobhunting-linkedin-crescimento`** | Opus 5.5 | Cria a estratégia de 30 dias para o SSI e escreve os 13 posts a partir da trajetória da pessoa. Entrega o `plano.json`. Não publica por ela. | Read, Write, Bash, Skill, AskUserQuestion |
+| **`jobhunting-executor`** | Haiku 5.5 | Executa o que já foi decidido: roda os geradores a partir dos JSON, confere páginas e arquivos, instala dependências, roda a coleta e grava dados. Não decide conteúdo. | Read, Write, Edit, Bash, Glob, Grep |
+| **`jobhunting-coletor`** | Haiku 5.5 | Roda o coletor, revisa o match lendo as descrições (ajusta até ±10 pontos, com o motivo), marca as vagas novas e devolve uma tabela com links. Nunca se candidata. | Read, Write, Bash, Glob, Grep, WebFetch, Skill |
+| **`jobhunting-recrutadores`** | Haiku 5.5 | Gera o guia de abordagem e cuida do dia a dia com recrutadores a partir dos modelos. Por padrão só prepara as mensagens; confere registro e histórico para nunca repetir uma mensagem. | Read, Write, Edit, Bash, Glob, Grep, Skill |
 
 Diagrama do orquestrador: [docs/arquitetura.md#2-um-agente-jobhunting-orquestrador](docs/arquitetura.md).
 
 ---
 
+## Modelos: Opus para estratégia, Haiku para execução
+
+Para gastar menos do plano sem perder qualidade, cada agente e skill declara o modelo no frontmatter (`model:`):
+
+| Tipo de trabalho | Modelo | Agentes | Skills |
+|---|---|---|---|
+| **Estratégia e escrita pesada:** entender o pedido e decidir o caminho, montar o perfil, adaptar currículo e carta, criar o plano de SSI e os posts | **Opus 5.5** (`claude-opus-5-5`) | `jobhunting`, `jobhunting-curriculo`, `jobhunting-carta`, `jobhunting-linkedin-crescimento` | `setup`, `curriculo`, `carta`, `plano-ssi` |
+| **Execução:** rodar scripts, coletar vagas, gerar PDF e DOCX, preencher modelos, gravar no painel, criar rotinas, registrar contatos | **Haiku 5.5** (`claude-haiku-5-5`) | `jobhunting-executor`, `jobhunting-coletor`, `jobhunting-recrutadores` | `buscar-vagas`, `abordagem-recrutadores`, `linkedin`, `dashboard`, `rotinas` |
+
+**Como o trabalho flui:** os agentes Opus escrevem o conteúdo (o JSON do currículo, da carta ou do plano) e param. O orquestrador manda o `jobhunting-executor` (Haiku) gerar o PDF e o DOCX a partir desse JSON. Se o Haiku errar duas vezes, ou se a tarefa pedir julgamento, o orquestrador devolve a tarefa para um agente Opus.
+
+**Para trocar:** edite o campo `model:` no topo do arquivo do agente (`agents/*.md`) ou da skill (`skills/*/SKILL.md`). Aceita um ID de modelo ou um apelido (`opus`, `sonnet`, `haiku`, `inherit`). O `scripts/checar_seguranca.py` confere se todos têm um modelo válido.
+
+---
+
 ## Skills
 
-| Skill (`/jobhunting:...`) | O que faz | Usa |
-|---|---|---|
-| `jobhunting-setup` | Entrevista, monta o perfil (inclusive a partir do CV atual) e oferece o kit de início | `setup_perfil.py`, `profile.example.json` |
-| `jobhunting-buscar-vagas` | Busca vagas agora e mostra as melhores com link, sem se candidatar | `coletor.py` |
-| `jobhunting-curriculo` | Currículo no modelo ATS para uma trilha ou vaga | `gerador_cv.py`, `templates/curriculo/modelo-ats.md` |
-| `jobhunting-carta` | Carta de apresentação no modelo de 4 parágrafos | `gerador_carta.py`, `templates/carta/modelo-carta.md` |
-| `jobhunting-plano-ssi` | Plano de crescimento do SSI com calendário e 13 posts | `gerador_plano_ssi.py`, `templates/linkedin/plano-ssi.md` |
-| `jobhunting-abordagem-recrutadores` | Guia com os 4 textos, a busca booleana e as vagas ocultas | `gerador_guia_recrutadores.py`, `templates/linkedin/abordagem-recrutadores.md` |
-| `jobhunting-linkedin` | Busca booleana de vagas, recrutadores, quem aceitou, follow-up e registro | `templates/mensagens-recrutadores.md`, `contatos.csv` |
-| `jobhunting-dashboard` | Cria ou atualiza o painel (build React, datasets, perfil privado para as rotinas) | `app/` |
-| `jobhunting-rotinas` | Cria as rotinas agendadas a partir dos modelos, sem dados pessoais no texto | `templates/rotinas/` |
+| Skill (`/jobhunting:...`) | Modelo | O que faz | Usa |
+|---|---|---|---|
+| `jobhunting-setup` | Opus 5.5 | Entrevista, monta o perfil (inclusive a partir do CV atual) e oferece o kit de início | `setup_perfil.py`, `profile.example.json` |
+| `jobhunting-buscar-vagas` | Haiku 5.5 | Busca vagas agora e mostra as melhores com link, sem se candidatar | `coletor.py` |
+| `jobhunting-curriculo` | Opus 5.5 | Currículo no modelo ATS para uma trilha ou vaga | `gerador_cv.py`, `templates/curriculo/modelo-ats.md` |
+| `jobhunting-carta` | Opus 5.5 | Carta de apresentação no modelo de 4 parágrafos | `gerador_carta.py`, `templates/carta/modelo-carta.md` |
+| `jobhunting-plano-ssi` | Opus 5.5 | Plano de crescimento do SSI com calendário e 13 posts | `gerador_plano_ssi.py`, `templates/linkedin/plano-ssi.md` |
+| `jobhunting-abordagem-recrutadores` | Haiku 5.5 | Guia com os 4 textos, a busca booleana e as vagas ocultas | `gerador_guia_recrutadores.py`, `templates/linkedin/abordagem-recrutadores.md` |
+| `jobhunting-linkedin` | Haiku 5.5 | Busca booleana de vagas, recrutadores, quem aceitou, follow-up e registro | `templates/mensagens-recrutadores.md`, `contatos.csv` |
+| `jobhunting-dashboard` | Haiku 5.5 | Cria ou atualiza o painel (build React, datasets, perfil privado para as rotinas) | `app/` |
+| `jobhunting-rotinas` | Haiku 5.5 | Cria as rotinas agendadas a partir dos modelos, sem dados pessoais no texto | `templates/rotinas/` |
 
 Diagrama de uma skill (currículo ATS): [docs/arquitetura.md#3-uma-skill-jobhunting-curriculo-curriculo-ats](docs/arquitetura.md).
 

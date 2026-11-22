@@ -1,6 +1,7 @@
 ---
 name: jobhunting-linkedin
 description: "LinkedIn no JobHunting. Monta e abre a busca booleana de vagas a partir das trilhas do perfil, prepara os 4 textos para recrutadores (conexão, vagas não divulgadas, pós-candidatura e follow-up) e mantém o registro de contatos sem repetir mensagens. Use quando o usuário pedir busca booleana, vagas no LinkedIn, mensagem para recrutador, convites, follow-up ou vagas ocultas."
+model: claude-haiku-5-5
 ---
 
 # JobHunting – LinkedIn

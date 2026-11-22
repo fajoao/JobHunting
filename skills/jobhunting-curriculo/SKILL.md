@@ -1,6 +1,7 @@
 ---
 name: jobhunting-curriculo
 description: "Gera o currículo no modelo ATS do JobHunting (PDF e DOCX, uma coluna, até 2 páginas) com os dados da pessoa, adaptado a uma trilha (ex.: Product Manager ou IT Manager) ou a uma vaga específica, sem inventar fatos. Use quando o usuário pedir currículo, CV, \"adaptar meu currículo\", \"currículo ATS\" ou colar uma vaga."
+model: claude-opus-5-5
 ---
 
 # JobHunting – currículo ATS

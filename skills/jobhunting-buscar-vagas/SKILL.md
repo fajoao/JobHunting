@@ -1,6 +1,7 @@
 ---
 name: jobhunting-buscar-vagas
 description: "Busca vagas agora nos sites que o usuário escolher (LinkedIn com busca booleana, Big Techs como Microsoft, Amazon e Google, bancos e fintechs, empresas de tecnologia), pontua o match de 0 a 100 e mostra as melhores com link, sem se candidatar. Use quando o usuário pedir \"buscar vagas\", \"o que tem de novo\", \"vagas com match\", \"buscar no LinkedIn\" ou quiser rodar a coleta manualmente."
+model: claude-haiku-5-5
 ---
 
 # JobHunting – buscar vagas

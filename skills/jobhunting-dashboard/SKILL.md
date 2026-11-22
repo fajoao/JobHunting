@@ -1,6 +1,7 @@
 ---
 name: jobhunting-dashboard
 description: "Cria ou atualiza o painel web do JobHunting (dashboard em React com KPIs, funil, gráficos, lista de vagas com Excluir e Marcar como aplicada, botão Buscar agora e progresso das buscas) como um Artifact do Claude, e guarda o perfil de forma privada nele para as rotinas. Use quando o usuário pedir dashboard, painel, \"ver minhas vagas\" ou publicar o JobHunting."
+model: claude-haiku-5-5
 ---
 
 # JobHunting – dashboard
