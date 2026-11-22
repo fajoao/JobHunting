@@ -58,7 +58,7 @@ def _md_runs(text):
 
 
 # ---------------------------------------------------------------- PDF (reportlab)
-def gerar_pdf(blocos, caminho, rodape=''):
+def gerar_pdf(blocos, caminho, rodape='', pagina='Página'):
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.units import cm
     from reportlab.lib import colors
@@ -139,7 +139,7 @@ def gerar_pdf(blocos, caminho, rodape=''):
         if not rodape: return
         canvas.saveState()
         canvas.setFont('Helvetica', 7.5); canvas.setFillColor(cinza_claro)
-        canvas.drawCentredString(A4[0] / 2, 1.0 * cm, f'{rodape}  |  Página {doc.page}')
+        canvas.drawCentredString(A4[0] / 2, 1.0 * cm, f'{rodape}  |  {pagina} {doc.page}')
         canvas.restoreState()
 
     os.makedirs(os.path.dirname(caminho) or '.', exist_ok=True)
@@ -150,7 +150,7 @@ def gerar_pdf(blocos, caminho, rodape=''):
 
 
 # ---------------------------------------------------------------- DOCX (python-docx)
-def gerar_docx(blocos, caminho, rodape=''):
+def gerar_docx(blocos, caminho, rodape='', pagina='Página'):
     from docx import Document
     from docx.shared import Pt, Cm, RGBColor
     from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -164,7 +164,7 @@ def gerar_docx(blocos, caminho, rodape=''):
         s.left_margin = s.right_margin = Cm(1.7)
         if rodape:
             fp = s.footer.paragraphs[0]; fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            r = fp.add_run(f'{rodape}  |  Página '); r.font.size = Pt(7.5); r.font.color.rgb = RGBColor(*CINZA_CLARO)
+            r = fp.add_run(f'{rodape}  |  {pagina} '); r.font.size = Pt(7.5); r.font.color.rgb = RGBColor(*CINZA_CLARO)
             for tag, txt in (('begin', None), (None, 'PAGE'), ('end', None)):
                 run = fp.add_run(); run.font.size = Pt(7.5)
                 if tag:
@@ -236,12 +236,12 @@ def pasta_privada(caminho):
     except OSError: pass
 
 
-def gerar(blocos, base_sem_extensao, rodape='', formatos=('pdf', 'docx')):
+def gerar(blocos, base_sem_extensao, rodape='', formatos=('pdf', 'docx'), pagina='Página'):
     """Gera os formatos pedidos (arquivos com permissão 600) e devolve a lista de caminhos."""
     pasta_privada(os.path.dirname(os.path.abspath(base_sem_extensao)))
     saidas = []
-    if 'pdf' in formatos: saidas.append(gerar_pdf(blocos, base_sem_extensao + '.pdf', rodape))
-    if 'docx' in formatos: saidas.append(gerar_docx(blocos, base_sem_extensao + '.docx', rodape))
+    if 'pdf' in formatos: saidas.append(gerar_pdf(blocos, base_sem_extensao + '.pdf', rodape, pagina))
+    if 'docx' in formatos: saidas.append(gerar_docx(blocos, base_sem_extensao + '.docx', rodape, pagina))
     for s in saidas:
         try: os.chmod(s, 0o600)
         except OSError: pass

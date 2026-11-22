@@ -47,3 +47,9 @@ Só fatos do perfil. Você pode:
 6. Entregue os caminhos do PDF e do DOCX, os 3 pontos mais fortes para a vaga e as lacunas. Ofereça a carta (`jobhunting-carta`).
 
 A candidatura é da pessoa. Só ajude a enviar se `busca.candidatura_automatica` for true e ela pedir explicitamente.
+
+## Currículo em inglês
+Algumas vagas só aceitam currículo em inglês (ex.: Google). Nesse caso:
+- escreva todo o conteúdo do `ajustes.json` em inglês, traduzindo fielmente os fatos do perfil, sem acrescentar nada;
+- inclua `"idioma": "en"` e todas as chaves com texto (`titulos`, `resumo`, `resultado_destaque`, `experiencias`, `formacao`, `formacao_complementar`, `certificacoes`, `idiomas`), para não sobrar português;
+- o gerador troca os títulos de seção, o rótulo do resultado de destaque, o contato ("Cidade, UF, Brazil | +55 ...") e o rodapé ("Page") para inglês.
