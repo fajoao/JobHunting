@@ -229,7 +229,7 @@ Sim, se ela publica vagas em Greenhouse, Lever, Workday, Oracle HCM ou Gupy. Inc
 O LinkedIn não tem API pública de vagas e proíbe automação. O coletor monta a busca booleana por trilha e devolve o link. Se você pedir, o Claude lê a lista no seu navegador, já logado, só para listar título, empresa e link.
 
 **Por que aparecem vagas fora da minha área na Microsoft, Amazon e Google?**
-Nessas empresas o padrão é trazer **todas** as vagas no Brasil. As que não batem com as suas trilhas aparecem como "Outras vagas", com match menor. Para mudar, edite `busca.todas_as_vagas` no perfil; vazio desliga.
+Nessas empresas o padrão é trazer **todas** as vagas no Brasil, sem filtro do seu perfil. As que não batem com as suas trilhas aparecem na aba "Outras vagas", que abre com todas as vagas, sem o corte de match. Com `busca.todas_as_vagas_so_tecnologia: true` (padrão no exemplo), essa aba fica só com vagas de tecnologia. Para mudar as empresas, edite `busca.todas_as_vagas` no perfil; vazio desliga.
 
 **Como o match de 0 a 100 é calculado?**
 O coletor soma quatro coisas:

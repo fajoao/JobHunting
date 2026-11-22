@@ -325,6 +325,42 @@ NIVEL_ACIMA = r'\b(director|diretor|vp|vice president|superintendente)\b'
 SENIOR = r'(senior|sr\b|especialista|staff|principal|coordenador|manager|gerente|head|lead)'
 
 
+# ---------- área de tecnologia (filtro opcional das empresas com todas as vagas) ----------
+AREA_TECH = (r'\b(engineer\w*|engenheir\w*|engineering|developer|desenvolvedor\w*|software|sde|programador|'
+             r'data|dados|analytics|scientist|cientista|machine learning|ml|ai|ia|artificial intelligence|genai|llm|'
+             r'cloud|aws|azure|gcp|oci|devops|sre|site reliability|infra\w*|network\w*|redes|security|seguranca|cyber|'
+             r'architect\w*|arquitet\w*|technical|ti|it|tecnologia|technology|systems?|sistemas|database|sap|erp|netsuite|crm|saas|'
+             r'product manager|tpm|qa|quality assurance|bi|business intelligence|hardware|firmware|embedded|mobile|'
+             r'android|ios|frontend|backend|full ?stack|digital|platform|plataforma|help ?desk|service desk)\b')
+AREA_NAO = (r'\b(warehouse|fulfillment|sorting center|sort center|delivery station|last mile|linehaul|middle mile|transportation|'
+            r'recruit\w*|recrutad\w*|talent acquisition|human resources|recursos humanos|hr|payroll|legal|juridico|counsel|'
+            r'accountant|contador|tax|fiscal|area manager|shift manager|operations manager|gerente de operacoes|'
+            r'flex|driver|motorista|associate|auxiliar|assistente)\b')
+AREA_NAO_FORTE = (r'(seguranca do trabalho|saude e seguranca|\bwhs\b|maintenance|manutencao|loss prevention|transportation|'
+                  r'hr business partner|people experience|marketing|process engineer|engenheir\w* de processos|planner|'
+                  r'facilit|\behs\b|safety|operations manager|area manager|warehouse|fulfillment|\bsort|last mile|linehaul|'
+                  r'recruit|talent acquisition|payroll|legal|counsel|\btax\b|account manager|sales specialist|sales operations|'
+                  r'partner growth|vendor manager|buyer|category manager|assistant|assistente|\bsales\b|vendas|executive)')
+AREA_SALVA = (r'(software|developer|desenvolvedor\w*|data center|datacenter|cloud|solutions? architect|arquitet\w* de solu|'
+              r'machine learning|data (scientist|engineer|analyst)|cientista de dados|engenheir\w* de dados|analista de dados|'
+              r'\bai\b|\bsde\b|it support|security solution|business intelligence|network (deployment|engineer)|technical program|'
+              r'technical account manager|tech product|product manager|customer engineer|solutions? engineer|forward deployed|\bfde\b)')
+AREA_SALVA_DEPTO = r'(data center|forward deployed|technical program|\btech\b|technology solutions)'
+
+
+def eh_tecnologia(titulo):
+    """True se a vaga é de tecnologia. Olha o cargo (antes da primeira vírgula) e, nos casos claros, o departamento."""
+    t = norm(titulo)
+    cargo = t.split(',')[0]
+    if re.search(AREA_SALVA, cargo):
+        return True
+    if re.search(AREA_NAO_FORTE, cargo) or re.search(AREA_NAO, cargo):
+        return False
+    if re.search(AREA_SALVA_DEPTO, t):
+        return True
+    return bool(re.search(AREA_TECH, cargo))
+
+
 def carregar_perfil(caminho):
     if not caminho or not os.path.exists(caminho):
         sys.exit(f'Perfil não encontrado: {caminho}. Rode a skill jobhunting-setup ou scripts/setup_perfil.py.')
@@ -427,12 +463,15 @@ def main(out, caminho_perfil, so_trilha=None, sites=None, perguntar=False):
 
     b = perfil.get('busca', {})
     todas = set(b['todas_as_vagas'] if 'todas_as_vagas' in b else TODAS_AS_VAGAS_PADRAO)
+    so_tech = bool(b.get('todas_as_vagas_so_tecnologia'))
     res, total = [], len(vagas)
     for v in vagas:
         if any(e and e in norm(v['empresa']) for e in regras.empresas_excluidas): continue
         tri = regras.trilha(v['titulo'])
         tudo = v.get('site') in todas
         if not tri and tudo and (not so_trilha or TRILHA_OUTRAS in so_trilha):
+            if so_tech and not eh_tecnologia(v['titulo']):
+                continue
             tri = TRILHA_OUTRAS
         if not tri or (so_trilha and tri not in so_trilha): continue
         lp, lmot = regras.local(v['local'], v['desc'])

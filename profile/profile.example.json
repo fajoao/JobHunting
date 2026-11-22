@@ -34,6 +34,7 @@
       "amazon",
       "google"
     ],
+    "todas_as_vagas_so_tecnologia": true,
     "linkedin": {
       "temas": [
         "IA",

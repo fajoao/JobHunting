@@ -103,7 +103,10 @@ function Card({ r, onStatus, saindo }: { r: Vaga; onStatus: (id: string, s: Stat
 export function Vagas({ trilha }: { trilha: string }) {
   const rt = useRuntime()
   const { status, rows } = useVagas(trilha)
-  const [filtro, setFiltro] = useState<Filtro>('perfil')
+  // "Outras vagas" ignores the profile (only the job's area matters), so it opens with every job.
+  const semPerfil = trilha === 'Outras vagas'
+  const [filtro, setFiltro] = useState<Filtro>(semPerfil ? 'todas' : 'perfil')
+  useEffect(() => setFiltro(semPerfil ? 'todas' : 'perfil'), [semPerfil])
   const [erro, setErro] = useState(false)
   const [saindo, setSaindo] = useState<Set<string>>(new Set())
   const lista = filtrar(rows, filtro)
@@ -128,7 +131,11 @@ export function Vagas({ trilha }: { trilha: string }) {
       <div className="jh-listhead">
         <div>
           <h2>Vagas</h2>
-          <p className="jh-sub" style={{ marginBottom: 0 }}>Ordenadas pelo match. Abra a vaga, use o currículo pronto e marque quando aplicar.</p>
+          <p className="jh-sub" style={{ marginBottom: 0 }}>
+            {semPerfil
+              ? 'Todas as vagas das empresas com "todas as vagas" (por padrão, só de tecnologia), sem filtro do seu perfil.'
+              : 'Ordenadas pelo match. Abra a vaga, use o currículo pronto e marque quando aplicar.'}
+          </p>
         </div>
         <select className="dash-select" aria-label="Filtrar por situação" value={filtro} onChange={(e) => setFiltro(e.target.value as Filtro)}>
           <option value="perfil">Dentro do perfil (65+)</option>
