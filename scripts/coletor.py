@@ -248,7 +248,7 @@ FONTES_PADRAO = [
 ]
 # Empresas cujas vagas entram todas (sem filtro de trilha nem de senioridade); trocável em busca.todas_as_vagas.
 TODAS_AS_VAGAS_PADRAO = ['microsoft', 'amazon', 'google']
-TRILHA_OUTRAS = 'Outras vagas'
+TRILHA_OUTRAS = 'Outras vagas'  # nome da aba; trocável em busca.nome_trilha_todas_as_vagas
 
 GRUPOS = {
     'linkedin': 'LinkedIn (busca booleana; abre no navegador)',
@@ -431,7 +431,11 @@ class Regras:
 
 
 def main(out, caminho_perfil, so_trilha=None, sites=None, perguntar=False):
+    global TRILHA_OUTRAS
     perfil = carregar_perfil(caminho_perfil)
+    TRILHA_OUTRAS = perfil.get('busca', {}).get('nome_trilha_todas_as_vagas') or TRILHA_OUTRAS
+    if so_trilha:  # "Outras vagas" continua valendo como apelido da aba, mesmo renomeada
+        so_trilha = [TRILHA_OUTRAS if t == 'Outras vagas' else t for t in so_trilha]
     regras = Regras(perfil)
     cat = catalogo(perfil)
     escolha = sites if sites is not None else (perfil.get('busca', {}).get('sites') or [])
